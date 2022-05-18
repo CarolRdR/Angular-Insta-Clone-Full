@@ -1,0 +1,47 @@
+{
+  "name": "fake-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start:build": "cross-env NODE_ENV=prod node index.js",
+    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
+    "test": "cross-env NODE_ENV=test jest",
+    "start": "cross-env NODE_ENV=dev nodemon"
+  },
+  "keywords": [
+    "node js",
+    "upload",
+    "download",
+    "file",
+    "multipart",
+    "rest api",
+    "express"
+  ],
+  "author": "Carol Ros",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^5.19.4",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "firebase": "^9.8.1",
+    "firebase-admin": "^10.2.0",
+    "helmet": "^5.0.2",
+    "json-server": "^0.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.3.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CarolRdR/fake-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CarolRdR/fake-server/issues"
+  },
+  "homepage": "https://github.com/CarolRdR/fake-server#readme"
+}

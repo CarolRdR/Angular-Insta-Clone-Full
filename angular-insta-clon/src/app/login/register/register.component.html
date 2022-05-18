@@ -1,0 +1,41 @@
+<div class="register">
+  <h1 class="title-registerform">Instaphoto</h1>
+  <div class="register-container">
+    <div class="login-register_buttons">
+      <a routerLink="/login" class="btn btn-link"><button class="login-button">Sign in</button></a>
+      <a routerLink="/register" class="btn btn-link"><button class="register-button">Register</button></a>
+    </div>
+
+    <form [formGroup]="registerForm" class="register-form" *ngIf="!isSuccessful" novalidate>
+
+      <input type="text" formControlName="username" name="name" placeholder="Username (required)" minlength="3"
+        maxlength="20" required="required" />
+      <div [hidden]="registerForm.get('username')?.valid || registerForm.get('username')?.untouched"
+        class="register-form__errors">
+        Invalid username ( 3 to 20 characters )
+      </div>
+
+      <input type="text" formControlName="email" name="email" placeholder="Email (required)" required="required" />
+      <div [hidden]="registerForm.get('email')?.valid || registerForm.get('email')?.untouched"
+        class="register-form__errors">
+        Email required
+      </div>
+
+      <input [type]="isVisible ? 'text' : 'password'" formControlName="password" name="password"
+        placeholder="Password (required)" minlength="6" maxlength="20" required="required" />
+      <div [hidden]="registerForm.get('password')?.valid || registerForm.get('password')?.untouched"
+        class="register-form__errors">
+        Invalid password ( 6 to 20 characters )
+      </div>
+      <img role="button" alt="Eye" src="../../assets/images/eye.fill.png" class="eye-button"
+        (click)="isVisible = !isVisible">
+
+    </form>
+
+    <div class="register-button-container">
+      <button class="register-button__bottom" type="submit" (click)="register()"
+        [ngClass]="{disabled: registerForm.invalid}">Register</button>
+    </div>
+  </div>
+  <p>By creating an account or signing you agree to our Terms and Conditions.</p>
+</div>

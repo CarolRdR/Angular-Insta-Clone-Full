@@ -1,0 +1,17 @@
+<header>
+  <div class="header">
+    <h1 class="header-app-name">Mini-Insta Clone</h1>
+
+    <ul class="header-router">
+      <li *ngFor="let item of menuNavigation">
+        <a [routerLink]="item.path"><img class="header-router-icon" [src]="item.label" [alt]="item.imageAlt">
+        </a>
+
+      </li>
+      <div class="logout-button-container">
+        <img class="button-logout" type="button" src="/assets/images/logout.png" (click)="logout()">
+      </div>
+    </ul>
+
+  </div>
+</header>

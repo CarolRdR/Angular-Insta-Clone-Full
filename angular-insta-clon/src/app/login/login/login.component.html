@@ -1,0 +1,32 @@
+<div class="login">
+  <h1>Instaphoto</h1>
+  <div class="login-container">
+    <div class="login-register_buttons">
+      <a routerLink="/login" class="btn btn-link"><button class="login-button">Sign in</button></a>
+      <a routerLink="/register" class="btn btn-link"><button class="register-button">Register</button></a>
+    </div>
+
+    <form [formGroup]="loginForm" class="login-form">
+
+      <input type="text" formControlName="email" name="email" placeholder="Email" required="required" />
+      <div [hidden]="loginForm.get('email')?.valid || loginForm.get('email')?.untouched" class="login-form__errors">
+        Invalid email
+      </div>
+      <input [type]="isVisible ? 'text' : 'password'" formControlName="password" name="password" placeholder="Password"
+        required="required" />
+      <div [hidden]="loginForm.get('password')?.valid || loginForm.get('password')?.untouched"
+        class="login-form__errors">
+        Invalid password ( 6 to 20 characters )
+      </div>
+      <img role="button" alt="Eye" src="../../assets/images/eye.fill.png" class="eye-button"
+        (click)="isVisible = !isVisible">
+
+    </form>
+
+    <div class="login-button-container">
+      <button class="login-button__bottom" type="submit" [disabled]="!loginForm.valid" (click)="login()">Sign
+        in</button>
+    </div>
+  </div>
+  <p>By creating an account or signing you agree to our Terms and Conditions.</p>
+</div>

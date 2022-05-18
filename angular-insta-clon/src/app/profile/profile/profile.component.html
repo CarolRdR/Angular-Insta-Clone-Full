@@ -1,0 +1,76 @@
+<div id="profile-user-component">
+  <app-header></app-header>
+
+  <div class="title-user">
+
+    <div class="title">
+
+      <div class="user-data__image-controls">
+        <div class="user-data__image-wrapper">
+
+          <img class="user-data__image-preview" [src]="profileImage" alt="Profile Image" />
+        </div>
+
+        <div class="user-data__image-controls-edit">
+          <img src="/assets/images/edit.png" alt="" srcset="" width="14px" height="15px"
+            (click)="toggleActiveProfile()" />
+        </div>
+
+        <div class="user-data__username-container">
+          <h1 class="user-data__username">{{profileData}}</h1>
+        </div>
+      </div>
+
+      <div *ngIf="active" class="user-data__dropzone">
+        <div>
+          <img class="user-data__dropzone-close" src="/assets/images/close.png" alt="close"
+            (click)="toggleActiveProfile()" />
+        </div>
+        <label class="user-data__dropzone-label" for="fileDropRef">Selecciona una foto</label>
+        <input type="file" name="file" (change)="fileHandlerProfile($event)" accept=".jpeg,.jpg,.png,.svg" #fileDropRef
+          id="fileDropRef" />
+        <button class="user-data__update" type="button" (click)="saveProfile()">Save</button>
+      </div>
+    </div>
+
+    <div class="upload-image__controls">
+      <div class="upload-image__wrapper">
+
+        <div class="upload-image">
+          <img src='/assets/images/add.png' alt="" srcset="" width="14px" height="15px" (click)="toggleActivePosts()" />
+        </div>
+
+        <div *ngIf="open" class="upload-image__drop">
+          <div class="upload-image__drop-controls">
+            <div>
+              <img class="upload-image__drop-close" src="/assets/images/close.png" alt="close"
+                (click)="toggleActivePosts()" />
+            </div>
+            <label class="upload-image__drop-label" for="fileDropRef">Selecciona una foto</label>
+            <input class="upload-image__drop-select" type="file" accept=".png,.jpg" name="" #fileDropRef
+              id="fileDropRef" (change)="fileHandlerPosts($event)">
+            <button class="user-data__update" type="button" (click)="uploadImage()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="images">
+    <ul class="images-grid" *ngIf="loggedUserData">
+
+      <li *ngFor="let image of imageList">
+        <div class="images-grid__posted">
+          <a routerLink="/post/">
+            <img [src]="image" [alt]="image" type="image" class="images-grid__posted-all">
+          </a>
+        </div>
+        <div class="button__container-delete">
+          <img class="button__posted-delete" type="button" src="/assets/images/delete.png" alt="delete"
+            (click)="deletePost()" />
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>

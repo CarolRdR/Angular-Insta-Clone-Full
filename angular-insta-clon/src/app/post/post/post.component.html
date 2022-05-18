@@ -1,0 +1,35 @@
+<div id="profile-user-component">
+  <app-header></app-header>
+
+  <div class="posts-result-container">
+    <ul>
+      <li *ngFor="let item of postsList" class="search-result">
+
+        <div class="search-result__user">
+          <div class="search-result___details">
+            <a routerLink="/user/{{item._id}}" class="search-result__name">
+              <img [src]="item.url" [alt]="item._id" type="image" class="images-grid__posted-all">
+            </a>
+            <p class="search-result__bands">{{item.user}}</p>
+          </div>
+
+
+        </div>
+
+
+        <div class="search-result__add">
+          <img role="button" alt="Add" src="" class="add-friend" (click)="addComment(item._id)">
+        </div>
+      </li>
+    </ul>
+
+  </div>
+
+
+
+
+
+
+
+
+</div>
