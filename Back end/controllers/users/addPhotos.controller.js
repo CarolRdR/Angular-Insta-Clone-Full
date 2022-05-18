@@ -83,7 +83,7 @@ export const getIndividualPhoto = async (req, resp, next) => {
     const { comments } = req.body
     console.log(req.body)
 
-    let foundPost = await Post.find({
+    let foundPost = await Post.findById(req.params, {
       comment: { $in: comments },
     }).populate("comments")
 

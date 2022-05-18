@@ -16,7 +16,7 @@ const router = express.Router()
 
 router
   .get("/", loginAuthentication, getListPhotos)
-  .get("/", loginAuthentication, getIndividualPhoto)
+  .get("/:idPost", loginAuthentication, getIndividualPhoto)
   .post("/", loginAuthentication, uploadPhotos)
   .patch("/:id", loginAuthentication, updateUser)
   .delete("/:id/:idPost", loginAuthentication, userRequired, deletePost)
