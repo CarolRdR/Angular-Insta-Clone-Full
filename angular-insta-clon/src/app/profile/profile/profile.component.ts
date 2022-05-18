@@ -117,7 +117,7 @@ export class ProfileComponent implements OnInit {
         data.ref.getDownloadURL().then((url) => {
           this.downloadableURL = url;
 
-          // this.imageToUploadList.push(this.downloadableURL);
+          this.imageToUploadList.push(this.downloadableURL);
           // document
           //   .getElementsByClassName('user-data__post-preview')[0]
           //   .setAttribute('src', this.downloadableURL);

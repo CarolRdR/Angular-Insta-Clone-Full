@@ -34,7 +34,7 @@ export const uploadPhotos = async (req, resp, next) => {
           select: "userName",
         },
         {
-          path: "userId",
+          path: "user",
           select: "name",
         },
       ],
@@ -54,6 +54,7 @@ export const getListPhotos = async (req, resp, next) => {
   await mongoConnect()
   try {
     const { posts } = req.body
+    console.log("body", req.body)
 
     let foundPosts = await User.find({
       post: { $in: posts },
@@ -64,13 +65,10 @@ export const getListPhotos = async (req, resp, next) => {
     }
 
     foundPosts = foundPosts.map((post) => {
-      const { posts, comments, url, user } = post._doc
-      return {
-        posts,
-        comments,
-        url,
-        user,
-      }
+      const { posts } = post._doc
+      // comments, url, user
+
+      return posts
     })
     console.log("lo que me trae posts", foundPosts)
     resp.json(foundPosts)

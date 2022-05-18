@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit {
   constructor(public store: StoreService, public router: Router) {
     this.menuNavigation = [
       {
-        path: '/post',
+        path: '/post/:id',
         label: '/assets/images/profile2.png',
         imageAlt: 'Profile',
       },

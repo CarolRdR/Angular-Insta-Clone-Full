@@ -31,11 +31,14 @@ export class PostComponent implements OnInit {
         this.errorMessage = error;
       },
     });
-  }
 
-  getUsersPosts(): void {
     this.userService.getAllPosts(this.token).subscribe((data) => {
       this.postsList = data;
+
+      // .filter((item: any) => {
+      //   console.log('es url', item.url);
+      //   return item.url;
+      // });
       console.log(this.postsList);
 
       // .filter(
