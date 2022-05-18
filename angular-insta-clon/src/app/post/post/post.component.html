@@ -1,35 +1,38 @@
-<div id="profile-user-component">
+<div id="posts-component">
   <app-header></app-header>
 
-  <div class="posts-result-container">
-    <ul>
-      <li *ngFor="let item of postsList" class="search-result">
+  <div class="posts-result__container">
+    <ul class="posts-result__container-results">
+      <li *ngFor="let item of postsList" class="posts-result">
 
-        <div class="search-result__user">
-          <div class="search-result___details">
-            <a routerLink="/user/{{item._id}}" class="search-result__name">
-              <img [src]="item.url" [alt]="item._id" type="image" class="images-grid__posted-all">
-            </a>
-            <p class="search-result__bands">{{item.user}}</p>
-          </div>
-
-
+        <div class="posts-result___details">
+          <a routerLink="/post/{{item._id}}" class="posts-result__name">
+            <img [src]="item.url" [alt]="item._id" type="image" class="posts-result__posted-all">
+          </a>
+          <p class="posts-result__comment">{{item.comments}}</p>
         </div>
 
 
-        <div class="search-result__add">
-          <img role="button" alt="Add" src="" class="add-friend" (click)="addComment(item._id)">
+
+        <div class="posts-result__add">
+          <img role="button" alt="Add Comment" src="/assets/images/comment.png" class="posts-result__add-comment"
+            (click)="addComment(item._id)">
         </div>
+
+        <div class="posts-result__sample-comments">
+          <span class="posts-result__add-comment">{{item.user}}</span>
+          <span class="posts-result__add-comment">{{item.comments}}</span>
+        </div>
+
+        <div class="posts-result__comment">
+          <form class="posts-result__comment-form">
+            <textarea placeholder="Add a comment..." type="text" class="posts-result__comment-box"></textarea>
+          </form>
+        </div>
+
       </li>
     </ul>
 
   </div>
-
-
-
-
-
-
-
 
 </div>

@@ -13,6 +13,7 @@ const USER_KEY = 'auth-user';
   providedIn: 'root',
 })
 export class UserService {
+  imagesList: string[] = [];
   constructor(private http: HttpClient) {}
 
   getUserProfile(token: string, userId: string): Observable<UserDataI> {
@@ -33,10 +34,10 @@ export class UserService {
     };
     return this.http.get(USER_URL, httpOptions).pipe(
       map((data: any) => {
-        const allUsersPosts = data;
-        return allUsersPosts.map((item: any) => {
-          return item.posts;
-        });
+        console.log('y trae.....', data);
+        let mergedData = [].concat.apply([], data);
+        this.imagesList = mergedData;
+        return this.imagesList;
       })
     );
   }
