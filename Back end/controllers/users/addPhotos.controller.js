@@ -26,7 +26,7 @@ export const uploadPhotos = async (req, resp, next) => {
       { new: true }
     )
 
-    await Post.findById(postId).populate({
+    await Post.findByIdAndUpdate(postId).populate({
       path: "comments",
       populate: [
         {
@@ -74,6 +74,35 @@ export const getListPhotos = async (req, resp, next) => {
     })
     console.log("lo que me trae posts", foundPosts)
     resp.json(foundPosts)
+  } catch (error) {
+    next(createError(error, 404))
+  }
+}
+
+export const getIndividualPhoto = async (req, resp, next) => {
+  await mongoConnect()
+  try {
+    const { comments } = req.body
+    console.log(req.body)
+
+    let foundPost = await Post.find({
+      comment: { $in: comments },
+    }).populate("comments")
+
+    if (!foundPosts) {
+      next(204)
+    }
+
+    foundPost = foundPost.map((post) => {
+      const { comments, url, user } = post._doc
+      return {
+        comments,
+        url,
+        user,
+      }
+    })
+    console.log("lo que me trae posts", foundPost)
+    resp.json(foundPost)
   } catch (error) {
     next(createError(error, 404))
   }

@@ -13,6 +13,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage/';
 import { LoginModule } from './login/login.module';
 import { ProfileModule } from './profile/profile.module';
 import { PostModule } from './post/post.module';
+import { IndividualPostModule } from './individual-post/individual-post.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,6 +34,7 @@ import { PostModule } from './post/post.module';
     LoginModule,
     ProfileModule,
     PostModule,
+    IndividualPostModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

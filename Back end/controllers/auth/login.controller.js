@@ -18,6 +18,7 @@ export const loginUser = async (req, resp, next) => {
       next(loginError)
     } else {
       const id = userFound.id
+
       const token = createToken({
         email: userFound.email,
         id,
@@ -28,7 +29,8 @@ export const loginUser = async (req, resp, next) => {
         id: userFound.id,
         profileImage: userFound.profileImage,
         username: userFound.username,
-        userFound,
+        posts: userFound.posts,
+        // userFound,
       })
     }
   }

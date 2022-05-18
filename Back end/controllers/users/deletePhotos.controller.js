@@ -5,10 +5,12 @@ import { User } from "../../model/user.model.js"
 
 export const deletePost = async (req, res, next) => {
   await mongoConnect()
-
+  console.log(req.body)
   try {
-    const idPost = req.body
-    const userId = req.tokenPayload.id
+    const idPost = req.body.id
+    console.log(idPost)
+    const userId = req.params.id
+    console.log(userId)
 
     const response = await Post.findByIdAndDelete(idPost, {
       new: true,

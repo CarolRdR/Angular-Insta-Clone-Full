@@ -24,6 +24,7 @@ export const loginAuthentication = (req, res, next) => {
 }
 export const loginWithToken = async (req, res, next) => {
   const authorization = req.get("authorization")
+
   let token
   let decodedToken
   const tokenError = new Error("Token missing or invalid")
@@ -36,6 +37,7 @@ export const loginWithToken = async (req, res, next) => {
       next()
     } else {
       const data = await initialUser(decodedToken.email)
+
       if (!data) {
         next()
       }

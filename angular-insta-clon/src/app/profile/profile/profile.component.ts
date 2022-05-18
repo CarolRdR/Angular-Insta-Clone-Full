@@ -8,6 +8,7 @@ import {
   AngularFireUploadTask,
 } from '@angular/fire/compat/storage';
 import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -27,19 +28,22 @@ export class ProfileComponent implements OnInit {
   token: string;
   errorMessage: string;
   loggedUserData!: UserDataI;
+  userData!: UserDataI;
   profileData!: string;
   profileImage!: string;
   postsUserData!: PostDataI;
   downloadableURL: string | undefined = undefined;
   imageToUploadList: string[] = [];
   imageList: string[] = [];
+  userList: string[] = [];
   active = false;
   open = false;
 
   constructor(
     public store: StoreService,
     public userService: UserService,
-    public storageFirebase: AngularFireStorage
+    public storageFirebase: AngularFireStorage,
+    public router: Router
   ) {
     this.token = '';
     this.postId = '';
@@ -56,15 +60,18 @@ export class ProfileComponent implements OnInit {
     this.store.getUser().subscribe({
       next: (data) => {
         this.loggedUserData = data;
-        const { username, profileImage } = this.loggedUserData;
+        console.log('Initial', this.loggedUserData);
+
+        const { username, profileImage, posts, id, token, email } =
+          this.loggedUserData;
         this.profileData = username;
         this.profileImage = profileImage;
-        this.loggedUserData = data.userFound.posts.map((item) => {
-          this.imageList.push(item['url']);
 
-          return this.imageList;
+        posts.map((item) => {
+          this.imageList.push(item['url']);
+          this.userList.push(item['user']);
+          return [this.imageList, this.userList];
         }) as any;
-        console.log('getuser', this.loggedUserData);
       },
     });
   }
@@ -128,27 +135,17 @@ export class ProfileComponent implements OnInit {
         token: this.loggedUserData.token,
         id: this.loggedUserData.id,
         email: this.loggedUserData.email,
-        username: this.loggedUserData.userFound.username,
+        username: this.loggedUserData.username,
         profileImage: this.downloadableURL!,
-        userFound: {
-          username: this.loggedUserData.userFound.username,
-          profileImage: this.downloadableURL!,
-          posts: this.loggedUserData.userFound.posts,
-        },
-        // token: this.loggedUserData.token,
-        // id: this.loggedUserData.id,
-        // email: this.loggedUserData.email,
-        // userFound: this.userService.prepareData(this.profileUserForm),
+        posts: this.loggedUserData.posts,
       })
       .subscribe({
         next: (data) => {
           this.userService.saveUser(data);
-          console.log(data);
+
           const userToStore: UserDataI = {
             ...this.loggedUserData,
-            userFound: {
-              ...data,
-            },
+            ...data,
           };
 
           this.store.setUser(userToStore);
@@ -166,9 +163,7 @@ export class ProfileComponent implements OnInit {
 
         const postToStore: UserDataI = {
           ...this.loggedUserData,
-          userFound: {
-            ...data,
-          },
+          ...data,
         };
 
         this.store.setUser(postToStore);
@@ -179,12 +174,20 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  imagePost() {
+    this.router.navigate([`post/url`]);
+  }
+
   deletePost(): void {
-    this.userService.deletePost(this.token, this.postId).subscribe({
-      next: (data) => {},
-      error: (error) => {
-        this.errorMessage = error;
-      },
-    });
+    this.userService
+      .deletePost(this.token, this.loggedUserData, this.postId)
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+        },
+        error: (error) => {
+          this.errorMessage = error;
+        },
+      });
   }
 }

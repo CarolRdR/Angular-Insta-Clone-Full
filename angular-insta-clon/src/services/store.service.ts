@@ -8,11 +8,7 @@ const initialState: UserDataI = {
   id: '',
   username: '',
   profileImage: '',
-  userFound: {
-    username: '',
-    profileImage: '',
-    posts: [],
-  },
+  posts: [],
 };
 
 const initialPost: PostDataI = {
