@@ -6,10 +6,12 @@ export const updateUser = async (req, res, next) => {
   await mongoConnect()
 
   try {
-    console.log("me hace update", req.body.userFound)
+    const profileImage = req.body
+    console.log(profileImage)
     const response = await User.findByIdAndUpdate(
       req.params.id,
-      req.body.userFound,
+      req.body,
+
       {
         new: true,
       }

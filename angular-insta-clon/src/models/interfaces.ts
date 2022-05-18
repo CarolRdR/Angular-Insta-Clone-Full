@@ -14,11 +14,7 @@ export interface UserDataI {
   id: string;
   profileImage: string;
   username: string;
-  userFound: {
-    username: string;
-    profileImage: string;
-    posts: [];
-  };
+  posts: [];
 }
 
 export interface PostDataI {

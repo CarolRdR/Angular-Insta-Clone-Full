@@ -41,12 +41,13 @@ export class LoginComponent implements OnInit {
     }
     this.authService.login(this.loginForm.value).subscribe({
       next: (data) => {
+        console.log('wahaaaaatttttt', data);
         this.authService.saveToken(data.token);
         this.storeService.setUser(data);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
 
-        this.router.navigate([`post`]);
+        this.router.navigate([`post/${data.id}`]);
       },
       error: (error) => {
         this.errorMessage = error;

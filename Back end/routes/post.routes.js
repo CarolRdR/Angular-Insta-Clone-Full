@@ -1,12 +1,12 @@
 import express from "express"
 import {
   loginAuthentication,
-  loginWithToken,
   userRequired,
 } from "../middlewares/interceptor.js"
 import { addComment, deleteComment } from "../controllers/comment.controller.js"
 import { deletePost } from "../controllers/users/deletePhotos.controller.js"
 import {
+  getIndividualPhoto,
   getListPhotos,
   uploadPhotos,
 } from "../controllers/users/addPhotos.controller.js"
@@ -16,6 +16,7 @@ const router = express.Router()
 
 router
   .get("/", loginAuthentication, getListPhotos)
+  .get("/", loginAuthentication, getIndividualPhoto)
   .post("/", loginAuthentication, uploadPhotos)
   .patch("/:id", loginAuthentication, updateUser)
   .delete("/:id/:idPost", loginAuthentication, userRequired, deletePost)

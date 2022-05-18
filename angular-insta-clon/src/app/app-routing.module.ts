@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { IndividualPostComponent } from './individual-post/individual-post/individual-post.component';
 import { LoginComponent } from './login/login/login.component';
 import { RegisterComponent } from './login/register/register.component';
 
@@ -8,7 +9,12 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
   { path: 'register', component: RegisterComponent, pathMatch: 'full' },
   {
-    path: 'post',
+    path: 'post/url',
+    component: IndividualPostComponent,
+    pathMatch: 'full',
+  },
+  {
+    path: 'post/:id',
     loadChildren: () =>
       import('./profile/profile.module').then((m) => m.ProfileModule),
   },

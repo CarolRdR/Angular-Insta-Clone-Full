@@ -33,7 +33,7 @@ export class UserService {
     };
     return this.http.get(USER_URL, httpOptions).pipe(
       map((data: any) => {
-        const allUsersPosts = data.userFound;
+        const allUsersPosts = data;
         return allUsersPosts.map((item: any) => {
           return item.posts;
         });
@@ -46,6 +46,7 @@ export class UserService {
     const httpOptions = {
       headers: new HttpHeaders({ Authorization: `Bearer ${user.token}` }),
     };
+
     return this.http.patch(USER_URL + user.id, user, httpOptions);
   }
 
@@ -62,7 +63,11 @@ export class UserService {
     return this.http.post(USERPOST_URL, body, httpOptions);
   }
 
-  deletePost(token: string, idPost: string): Observable<any> {
+  deletePost(
+    token: string,
+    userId: UserDataI,
+    idPost: string
+  ): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${token}`,
@@ -70,7 +75,7 @@ export class UserService {
       }),
     };
 
-    return this.http.delete(USER_URL + `${idPost}`, httpOptions);
+    return this.http.delete(USER_URL + userId.id + `/${idPost}`, httpOptions);
   }
 
   addCommentToPost(user: UserDataI, idPost: string): Observable<UserDataI> {
