@@ -47,12 +47,12 @@ export const addComment = async (req, res, next) => {
     ])
 
     await User.findByIdAndUpdate(
-      id,
-      {
-        $push: { posts: postId },
-      },
-      { new: true }
-    )
+      id
+      // {
+      //   $push: { posts: postId },
+      // },
+      // { new: true }
+    ).populate("posts")
 
     console.log("Ruina actualizada, ", response)
 

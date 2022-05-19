@@ -20,7 +20,7 @@ export interface UserDataI {
 export interface PostDataI {
   _id: string;
   url: string | undefined;
-  comments: Array<any>;
+  comments: [content: string, author_id: string];
   user: string;
 }
 

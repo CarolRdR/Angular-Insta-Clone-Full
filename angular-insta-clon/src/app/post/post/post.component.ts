@@ -39,7 +39,7 @@ export class PostComponent implements OnInit {
       //   console.log('es url', item.url);
       //   return item.url;
       // });
-      console.log(this.postsList);
+      console.log('posts', this.postsList);
 
       // .filter(
       //   (item) =>
@@ -50,5 +50,21 @@ export class PostComponent implements OnInit {
     });
   }
 
-  addComment(id: any) {}
+  addComment(id: any) {
+    // this.userService
+    //   .addCommentToPost(this.userData, this.postsList._id)
+    //   .subscribe({
+    //     next: (data) => {
+    //       this.userService.saveUser(data);
+    //       const postToStore: PostDataI = {
+    //         ...this.postsList,
+    //         ...data,
+    //       };
+    //       // this.store.setUser(postToStore);
+    //     },
+    //     error: (error: any) => {
+    //       this.errorMessage = error;
+    //     },
+    //   });
+  }
 }

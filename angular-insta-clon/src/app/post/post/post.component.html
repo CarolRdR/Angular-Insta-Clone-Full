@@ -6,27 +6,28 @@
       <li *ngFor="let item of postsList" class="posts-result">
 
         <div class="posts-result___details">
-          <a routerLink="/post/{{item._id}}" class="posts-result__name">
-            <img [src]="item.url" [alt]="item._id" type="image" class="posts-result__posted-all">
-          </a>
+
+          <img [src]="item.url" [alt]="item._id" type="image" class="posts-result__posted-all">
+
           <p class="posts-result__comment">{{item.comments}}</p>
         </div>
 
 
 
         <div class="posts-result__add">
-          <img role="button" alt="Add Comment" src="/assets/images/comment.png" class="posts-result__add-comment"
-            (click)="addComment(item._id)">
+          <a routerLink="/postdetail/{{item._id}}" class="posts-result__name">
+            <img role="button" alt="Add Comment" src="/assets/images/comment.png" class="posts-result__add-comment"
+              (click)="addComment(item._id)"></a>
         </div>
 
         <div class="posts-result__sample-comments">
           <span class="posts-result__add-comment">{{item.user}}</span>
-          <span class="posts-result__add-comment">{{item.comments}}</span>
+          <!-- <span class="posts-result__add-comment">{{item.comments}}</span> -->
         </div>
 
         <div class="posts-result__comment">
           <form class="posts-result__comment-form">
-            <textarea placeholder="Add a comment..." type="text" class="posts-result__comment-box"></textarea>
+            <textarea placeholder="Add a comment..." rows="2" type="text" class="posts-result__comment-box"></textarea>
           </form>
         </div>
 

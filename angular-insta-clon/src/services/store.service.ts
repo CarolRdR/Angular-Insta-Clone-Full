@@ -14,7 +14,7 @@ const initialState: UserDataI = {
 const initialPost: PostDataI = {
   _id: '',
   url: '',
-  comments: [],
+  comments: ['content', 'author_id'],
   user: '',
 };
 
