@@ -43,9 +43,7 @@ export class PostComponent implements OnInit {
     this.store.getUser().subscribe({
       next: (data) => {
         this.userData = data;
-        this.commentForm
-          .get('content')
-          ?.setValue(this.post.comments[0].content);
+        this.commentForm.get('content')?.setValue(this.post.comments);
       },
       error: (error) => {
         this.errorMessage = error;
@@ -65,7 +63,7 @@ export class PostComponent implements OnInit {
     });
   }
 
-  addComment(post: PostDataI) {
+  addComment(post: any) {
     this.userService
       .addCommentToPost(
         this.token,
@@ -74,14 +72,13 @@ export class PostComponent implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.userService.saveUser(data);
 
           const postToStore = {
             ...this.contentList,
             ...data,
           };
-          this.store.setImage(postToStore);
+          this.store.setUser(postToStore);
         },
         error: (error: any) => {
           this.errorMessage = error;
