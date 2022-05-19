@@ -5,7 +5,7 @@ import { PostDataI, UserDataI } from 'src/models/interfaces';
 const initialState: UserDataI = {
   email: '',
   token: '',
-  id: '',
+  _id: '',
   username: '',
   profileImage: '',
   posts: [],
@@ -14,8 +14,15 @@ const initialState: UserDataI = {
 const initialPost: PostDataI = {
   _id: '',
   url: '',
-  comments: ['content', 'author_id'],
-  user: '',
+  comments: [{ content: '', author_id: '' }],
+  user: {
+    email: '',
+    token: '',
+    _id: '',
+    username: '',
+    profileImage: '',
+    posts: [],
+  },
 };
 
 @Injectable({
@@ -40,7 +47,6 @@ export class StoreService {
   }
   setImage(post: PostDataI) {
     this.post = this.post;
-    console.log('Ticking next');
     this.post$.next(this.post);
   }
 

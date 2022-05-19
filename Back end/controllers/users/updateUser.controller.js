@@ -7,7 +7,7 @@ export const updateUser = async (req, res, next) => {
 
   try {
     const profileImage = req.body
-    console.log(profileImage)
+
     const response = await User.findByIdAndUpdate(
       req.params.id,
       req.body,

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { PostDataI, UserDataI } from 'src/models/interfaces';
 import { StoreService } from 'src/services/store.service';
@@ -10,61 +11,81 @@ import { UserService } from 'src/services/user.service';
   styleUrls: ['./post.component.scss'],
 })
 export class PostComponent implements OnInit {
+  @Input() comment: any;
+
   token: string;
+  commentForm!: FormGroup;
   userData!: UserDataI;
   errorMessage: string;
-  postsList!: Array<PostDataI>;
+  postsList!: PostDataI[];
+  post!: PostDataI;
+  contentList: any[] = [];
+  url!: string | undefined;
+  user!: UserDataI;
+  processing = false;
 
-  constructor(public userService: UserService, public store: StoreService) {
+  constructor(
+    public userService: UserService,
+    public store: StoreService,
+    private fb: FormBuilder
+  ) {
     this.token = '';
     this.errorMessage = '';
   }
 
   ngOnInit(): void {
+    this.commentForm = this.fb.group({
+      content: [''],
+    });
+
     this.token = localStorage.getItem('auth-token') as string;
 
     this.store.getUser().subscribe({
       next: (data) => {
         this.userData = data;
+        this.commentForm
+          .get('content')
+          ?.setValue(this.post.comments[0].content);
       },
       error: (error) => {
         this.errorMessage = error;
       },
     });
 
-    this.userService.getAllPosts(this.token).subscribe((data) => {
-      this.postsList = data;
+    this.userService.getAllPosts(this.token).subscribe({
+      next: (data) => {
+        this.postsList = [...data];
 
-      // .filter((item: any) => {
-      //   console.log('es url', item.url);
-      //   return item.url;
-      // });
-      console.log('posts', this.postsList);
-
-      // .filter(
-      //   (item) =>
-      //     !this.userData.userFound.posts?.some(
-      //       (e: any) => item._id === e._id
-      //     ) && item._id !== this.userData.id
-      // );
+        this.postsList.forEach((item) => {
+          this.contentList = item.comments;
+          console.log(this.contentList);
+          return this.contentList;
+        });
+      },
     });
   }
 
-  addComment(id: any) {
-    // this.userService
-    //   .addCommentToPost(this.userData, this.postsList._id)
-    //   .subscribe({
-    //     next: (data) => {
-    //       this.userService.saveUser(data);
-    //       const postToStore: PostDataI = {
-    //         ...this.postsList,
-    //         ...data,
-    //       };
-    //       // this.store.setUser(postToStore);
-    //     },
-    //     error: (error: any) => {
-    //       this.errorMessage = error;
-    //     },
-    //   });
+  addComment(post: PostDataI) {
+    this.userService
+      .addCommentToPost(
+        this.token,
+        post._id,
+        this.commentForm.get('content')?.value
+      )
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          this.userService.saveUser(data);
+
+          const postToStore = {
+            ...this.contentList,
+            ...data,
+          };
+          this.store.setImage(postToStore);
+        },
+        error: (error: any) => {
+          this.errorMessage = error;
+        },
+      });
   }
 }

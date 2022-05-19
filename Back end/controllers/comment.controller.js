@@ -5,23 +5,14 @@ import { createError } from "../services/errors.js"
 
 export const addComment = async (req, res, next) => {
   await mongoConnect()
-
-  // try {
-  //   const resp = await Post.findByIdAndUpdate(req.params.id, req.body, {
-  //     new: true,
-  //   })
-  //   console.log(resp, " RUINA ACTUALIZADA EN BACK")
-  //   res.status(201)
-  //   res.json(resp)
-  // } catch (err) {
-  //   next(err, "no se ha podido actualizar la ruina especificada.")
-  // }
-
+  console.log(req.body)
   try {
     const { content, author_id } = req.body
+    console.log("que trae el comment", { content, author_id })
 
     const postId = req.params.idPost
-    const { id } = req.tokenPayload
+    console.log(postId)
+    const id = req.tokenPayload
 
     const resp = await Post.findById(postId)
     if (!resp) {
@@ -32,13 +23,13 @@ export const addComment = async (req, res, next) => {
       postId,
 
       {
-        $push: { comments: { content } },
+        $push: { comments: { content, author_id } },
       },
       { new: true }
     ).populate("comments", [
       {
         path: "author_id",
-        select: "username",
+        select: "name",
       },
       {
         path: "content",
@@ -54,8 +45,6 @@ export const addComment = async (req, res, next) => {
       // { new: true }
     ).populate("posts")
 
-    console.log("Ruina actualizada, ", response)
-
     res.status(201)
     res.json(response)
   } catch (err) {
@@ -68,7 +57,7 @@ export const deleteComment = async (req, res, next) => {
 
   try {
     const commentId = req.body
-    console.log(commentId)
+
     const postId = req.params.idPost
 
     const post = await Post.findByIdAndUpdate(
