@@ -6,6 +6,7 @@ import { API_URL } from 'src/config';
 import { FormGroup } from '@angular/forms';
 
 const USER_URL = API_URL + 'post/';
+const POSTS_URL = API_URL + 'community/';
 const USERPOST_URL = API_URL + 'post';
 const USER_KEY = 'auth-user';
 
@@ -32,9 +33,8 @@ export class UserService {
         'Content-Type': 'application/json',
       }),
     };
-    return this.http.get(USER_URL, httpOptions).pipe(
+    return this.http.get<any>(USER_URL, httpOptions).pipe(
       map((data: any) => {
-        console.log('y trae.....', data);
         let mergedData = [].concat.apply([], data);
         this.imagesList = mergedData;
         return this.imagesList;
@@ -48,7 +48,7 @@ export class UserService {
       headers: new HttpHeaders({ Authorization: `Bearer ${user.token}` }),
     };
 
-    return this.http.patch(USER_URL + user.id, user, httpOptions);
+    return this.http.patch(USER_URL + user._id, user, httpOptions);
   }
 
   addPhoto(url: any, token: string): Observable<any> {
@@ -76,23 +76,23 @@ export class UserService {
       }),
     };
 
-    return this.http.delete(USER_URL + userId.id + `/${idPost}`, httpOptions);
+    return this.http.delete(USER_URL + userId._id + `/${idPost}`, httpOptions);
   }
 
-  addCommentToPost(user: UserDataI, idPost: string): Observable<UserDataI> {
-    console.log('token', user);
+  addCommentToPost(
+    token: string,
+    idPost: string,
+    content: string
+  ): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       }),
     };
-    const body = { commentId: user };
-    return this.http.patch<UserDataI>(
-      USER_URL + `${idPost}`,
-      body,
-      httpOptions
-    );
+    const body = content;
+    console.log(body);
+    return this.http.patch(POSTS_URL + idPost, body, httpOptions);
   }
 
   deleteCommentFromPost(
@@ -108,7 +108,7 @@ export class UserService {
     };
     const body = { commentId: user };
     return this.http.patch<UserDataI>(
-      USER_URL + `${idPost}`,
+      POSTS_URL + `${idPost}`,
       body,
       httpOptions
     );

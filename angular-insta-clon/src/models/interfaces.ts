@@ -11,7 +11,7 @@ export interface AuthRegisterI {
 export interface UserDataI {
   email: string;
   token: string;
-  id: string;
+  _id: string;
   profileImage: string;
   username: string;
   posts: [];
@@ -20,8 +20,8 @@ export interface UserDataI {
 export interface PostDataI {
   _id: string;
   url: string | undefined;
-  comments: [content: string, author_id: string];
-  user: string;
+  comments: [{ content: string; author_id: {} }];
+  user: UserDataI;
 }
 
 export interface MenuNavigationI {

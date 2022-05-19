@@ -60,9 +60,8 @@ export class ProfileComponent implements OnInit {
     this.store.getUser().subscribe({
       next: (data) => {
         this.loggedUserData = data;
-        console.log('Initial', this.loggedUserData);
 
-        const { username, profileImage, posts, id, token, email } =
+        const { username, profileImage, posts, _id, token, email } =
           this.loggedUserData;
         this.profileData = username;
         this.profileImage = profileImage;
@@ -88,7 +87,7 @@ export class ProfileComponent implements OnInit {
 
   fileHandlerProfile(event: any) {
     const file = event.target.files[0];
-    console.log('file', file);
+
     const randomId = Math.random().toString(36).substring(2);
     if (file) {
       const filePath = `UserProfile/${randomId}${file.name}`;
@@ -136,7 +135,7 @@ export class ProfileComponent implements OnInit {
     this.userService
       .updateUserProfile({
         token: this.loggedUserData.token,
-        id: this.loggedUserData.id,
+        _id: this.loggedUserData._id,
         email: this.loggedUserData.email,
         username: this.loggedUserData.username,
         profileImage: this.downloadableURL!,

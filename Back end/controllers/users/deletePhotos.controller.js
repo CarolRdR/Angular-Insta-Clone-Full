@@ -5,7 +5,7 @@ import { User } from "../../model/user.model.js"
 
 export const deletePost = async (req, res, next) => {
   await mongoConnect()
-  console.log(req.body)
+
   try {
     const idPost = req.body.id
     console.log(idPost)

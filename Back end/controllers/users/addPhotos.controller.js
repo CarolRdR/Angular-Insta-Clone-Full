@@ -9,14 +9,12 @@ export const uploadPhotos = async (req, resp, next) => {
   const url = req.body
 
   const userId = req.tokenPayload.id
-  console.log(userId)
 
   try {
     const response = await Post.create(url, {
       new: true,
     })
     const postId = response[0]._id
-    console.log(postId)
 
     await User.findByIdAndUpdate(
       userId,
@@ -54,7 +52,6 @@ export const getListPhotos = async (req, resp, next) => {
   await mongoConnect()
   try {
     const { posts } = req.body
-    console.log("body", req.body)
 
     let foundPosts = await User.find({
       post: { $in: posts },
@@ -70,7 +67,7 @@ export const getListPhotos = async (req, resp, next) => {
 
       return posts
     })
-    console.log("lo que me trae posts", foundPosts)
+
     resp.json(foundPosts)
   } catch (error) {
     next(createError(error, 404))
@@ -81,7 +78,6 @@ export const getIndividualPhoto = async (req, resp, next) => {
   await mongoConnect()
   try {
     const { comments } = req.body
-    console.log(req.body)
 
     let foundPost = await Post.findById(req.params, {
       comment: { $in: comments },
@@ -99,7 +95,7 @@ export const getIndividualPhoto = async (req, resp, next) => {
         user,
       }
     })
-    console.log("lo que me trae posts", foundPost)
+    // console.log("lo que me trae posts", foundPost)
     resp.json(foundPost)
   } catch (error) {
     next(createError(error, 404))
