@@ -61,7 +61,7 @@
 
       <li *ngFor="let image of imageList">
         <div class="images-grid__posted">
-          <a routerLink="/{{image}}">
+          <a routerLink="/postdetail/{{image}}">
             <img [src]="image" [alt]="image" type="image" class="images-grid__posted-all" (click)="imagePost()">
           </a>
         </div>

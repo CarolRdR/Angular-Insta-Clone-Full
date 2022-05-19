@@ -27,6 +27,7 @@
   &__details {
     display: flex;
     justify-content: center;
+    flex-direction: column;
   }
   &__posted-all {
     float: left;
@@ -35,7 +36,6 @@
     border: 1px solid black;
   }
   &__posted-all:hover {
-    cursor: pointer;
     opacity: 80%;
   }
 }
@@ -61,8 +61,10 @@
   border-top: 1px solid black;
 }
 .posts-result__comment-box {
-  padding-left: 12rem;
-  padding-right: 12rem;
   border: none;
   font-size: 20px;
+}
+textarea {
+  width: 635px;
+  height: 60px;
 }

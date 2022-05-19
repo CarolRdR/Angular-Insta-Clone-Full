@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
   { path: 'register', component: RegisterComponent, pathMatch: 'full' },
   {
-    path: 'post/url',
+    path: 'postdetail/:idPost',
     component: IndividualPostComponent,
     pathMatch: 'full',
   },

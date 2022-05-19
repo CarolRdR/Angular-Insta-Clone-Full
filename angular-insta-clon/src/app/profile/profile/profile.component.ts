@@ -34,7 +34,7 @@ export class ProfileComponent implements OnInit {
   postsUserData!: PostDataI;
   downloadableURL: string | undefined = undefined;
   imageToUploadList: string[] = [];
-  imageList: string[] = [];
+  imageList: [] = [];
   userList: string[] = [];
   active = false;
   open = false;
@@ -70,8 +70,11 @@ export class ProfileComponent implements OnInit {
         posts.map((item) => {
           this.imageList.push(item['url']);
           this.userList.push(item['user']);
-          return [this.imageList, this.userList];
-        }) as any;
+
+          // this.imageList = posts;
+          console.log(this.imageList);
+          return this.imageList;
+        });
       },
     });
   }
