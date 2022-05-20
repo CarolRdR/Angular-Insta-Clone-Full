@@ -54,6 +54,7 @@ export class PostComponent implements OnInit {
 
     this.store.getImage().subscribe({
       next: (data) => {
+        this.post = data;
         console.log('data', data);
       },
       error: (error) => {
@@ -67,7 +68,7 @@ export class PostComponent implements OnInit {
 
         this.postsList.forEach((item) => {
           this.contentList = item.comments;
-          console.log(this.contentList);
+
           return this.contentList;
         });
       },
@@ -81,7 +82,7 @@ export class PostComponent implements OnInit {
         comments: [
           {
             content: this.commentForm.get('content')?.value,
-            author_id: this.userData,
+            author_id: this.userData.username,
           },
         ],
 

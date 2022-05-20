@@ -6,13 +6,16 @@ import { createError } from "../services/errors.js"
 export const addComment = async (req, res, next) => {
   await mongoConnect()
   console.log(req.body)
+
   try {
-    const { content, author_id } = req.body
-    console.log("que trae el comment", { content, author_id })
+    const comment = req.body
+    // author_id = author_id._id.toString()
+    console.log("que trae el comment", req.body)
 
     const postId = req.params.idPost
     console.log(postId)
-    const id = req.tokenPayload
+    const id = req.tokenPayload.id
+    console.log(id)
 
     const resp = await Post.findById(postId)
     if (!resp) {
@@ -23,29 +26,99 @@ export const addComment = async (req, res, next) => {
       postId,
 
       {
-        $push: { comments: { content, author_id } },
+        $push: { comments: comment },
       },
       { new: true }
-    ).populate("comments", [
-      {
-        path: "author_id",
-        select: "name",
-      },
-      {
-        path: "content",
-        select: "name",
-      },
-    ])
+    ).populate({
+      path: "comments",
+      populate: [
+        {
+          path: "author_id",
+          select: "username",
+        },
+        {
+          path: "user",
+          select: "name",
+        },
+      ],
+    })
+
+    //   "comments", [
+    //   {
+    //     path: "author_id",
+    //     populate: [
+    //       {
+    //         path: "User",
+    //         select: "username",
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     path: "content",
+    //     select: "name",
+    //   },
+    // ])
 
     await User.findByIdAndUpdate(
-      id
-      // {
-      //   $push: { posts: postId },
-      // },
-      // { new: true }
-    ).populate("posts")
+      id,
+      {
+        $push: { comments: comment },
+      },
+      { new: true }
+    ).populate("posts", [
+      {
+        path: "comments",
+        populate: [
+          {
+            path: "author_id",
+            select: "username",
+          },
+          {
+            path: "user",
+            select: "name",
+          },
+        ],
+      },
+    ])
+    // .populate("posts", [
+    //   {
+    //     populate: "comments",
+    //     populate: [
+    //       {
+    //         path: "content",
+    //         select: "name",
+    //       },
+    //       {
+    //         path: "author_id",
+    //         populate: [
+    //           {
+    //             path: "User",
+    //             select: "username",
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   },
+    // ])
+
+    // await User.findByIdAndUpdate(id).populate("comments", [
+    //   {
+    //     path: "author_id",
+    //     populate: [
+    //       {
+    //         path: "User",
+    //         select: "username",
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     path: "content",
+    //     select: "name",
+    //   },
+    // ])
 
     res.status(201)
+    console.log("respuesta", response)
     res.json(response)
   } catch (err) {
     next(err, "no se ha podido crear el comentario especificado.")

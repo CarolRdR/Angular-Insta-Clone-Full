@@ -31,10 +31,11 @@ export class ProfileComponent implements OnInit {
   userData!: UserDataI;
   profileData!: string;
   profileImage!: string;
+  profileId!: string;
   postsUserData!: PostDataI;
   downloadableURL: string | undefined = undefined;
   imageToUploadList: string[] = [];
-  imageList: [] = [];
+  imageList: PostDataI[] = [];
   userList: string[] = [];
   active = false;
   open = false;
@@ -65,13 +66,13 @@ export class ProfileComponent implements OnInit {
           this.loggedUserData;
         this.profileData = username;
         this.profileImage = profileImage;
+        this.profileId = _id;
 
         posts.map((item) => {
-          this.imageList.push(item['url']);
+          this.imageList.push(item);
           this.userList.push(item['user']);
 
-          // this.imageList = posts;
-          console.log(this.imageList);
+          console.log('lista', this.imageList);
           return this.imageList;
         });
       },
@@ -180,16 +181,14 @@ export class ProfileComponent implements OnInit {
     this.router.navigate([`post/url`]);
   }
 
-  deletePost(): void {
-    this.userService
-      .deletePost(this.token, this.loggedUserData, this.postId)
-      .subscribe({
-        next: (data) => {
-          console.log(data);
-        },
-        error: (error) => {
-          this.errorMessage = error;
-        },
-      });
+  deletePost(post: any): void {
+    this.userService.deletePost(this.token, this.profileId, post).subscribe({
+      next: (data) => {
+        console.log(data);
+      },
+      error: (error) => {
+        this.errorMessage = error;
+      },
+    });
   }
 }

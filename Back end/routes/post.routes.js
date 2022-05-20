@@ -1,4 +1,5 @@
 import express from "express"
+
 import {
   loginAuthentication,
   userRequired,
@@ -16,9 +17,9 @@ const router = express.Router()
 
 router
   .get("/", loginAuthentication, getListPhotos)
-  .get("/:idPost", loginAuthentication, getIndividualPhoto)
   .post("/", loginAuthentication, uploadPhotos)
   .patch("/:id", loginAuthentication, updateUser)
   .delete("/:id/:idPost", loginAuthentication, userRequired, deletePost)
+  .get("/:idPost", loginAuthentication, getIndividualPhoto)
 
 export default router
