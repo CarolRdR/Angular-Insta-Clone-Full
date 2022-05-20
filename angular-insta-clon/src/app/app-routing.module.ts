@@ -22,11 +22,12 @@ const routes: Routes = [
     path: 'community',
     loadChildren: () => import('./post/post.module').then((m) => m.PostModule),
   },
+
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -31,6 +31,8 @@ app.use(helmet())
 app.use("/auth", authRouter)
 // app.use("/users", userRouter);
 app.use("/post", photoRouter)
+
+app.use("/community", photoRouter)
 app.use((err, req, resp, next) => {
   resp.status(401)
   resp.json({ Error: err.message })

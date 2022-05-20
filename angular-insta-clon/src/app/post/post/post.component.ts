@@ -11,7 +11,7 @@ import { UserService } from 'src/services/user.service';
   styleUrls: ['./post.component.scss'],
 })
 export class PostComponent implements OnInit {
-  @Input() comment: any;
+  // @Input() comment: any;
 
   token: string;
   commentForm!: FormGroup;
@@ -35,7 +35,7 @@ export class PostComponent implements OnInit {
 
   ngOnInit(): void {
     this.commentForm = this.fb.group({
-      content: '',
+      content: [''],
     });
 
     this.token = localStorage.getItem('auth-token') as string;
@@ -74,7 +74,8 @@ export class PostComponent implements OnInit {
     });
   }
 
-  addComment(id: string) {
+  addComment(id: any) {
+    // const inputComment = ev.target.value;
     this.userService
       .addCommentToPost(this.token, id, {
         comments: [
@@ -92,7 +93,7 @@ export class PostComponent implements OnInit {
         next: (data) => {
           this.userService.saveUser(data);
 
-          const postToStore = {
+          const postToStore: UserDataI = {
             ...this.contentList,
             ...data,
           };
