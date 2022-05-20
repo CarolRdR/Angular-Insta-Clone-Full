@@ -14,7 +14,7 @@ const initialState: UserDataI = {
 const initialPost: PostDataI = {
   _id: '',
   url: '',
-  comments: [{ content: '', author_id: '' }],
+  comments: [{ content: '', author_id: {} }],
   user: {
     email: '',
     token: '',
@@ -46,7 +46,7 @@ export class StoreService {
     this.user$.next(this.user);
   }
   setImage(post: PostDataI) {
-    this.post = this.post;
+    this.post = post;
     this.post$.next(this.post);
   }
 

@@ -27,10 +27,10 @@
   </div>
 
   <div class="posts-result__comment">
-    <form class="posts-result__comment-form">
-      <textarea placeholder="Add a comment..." type="input" rows="2" type="text"
+    <form class="posts-result__comment-form" [formGroup]="commentForm">
+      <textarea placeholder="Add a comment..." type="input" formControlName="content" rows="2" type="text"
         class="posts-result__comment-box"></textarea>
-      <button type="button" class="posts-result__comment-button" (click)="addComment(item)">Submit</button>
+      <button type="submit" class="posts-result__comment-button" (click)="addComment(item._id)">Submit</button>
     </form>
   </div>
 

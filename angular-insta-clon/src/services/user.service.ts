@@ -82,7 +82,7 @@ export class UserService {
   addCommentToPost(
     token: string,
     idPost: string,
-    comments: any
+    comments: PostDataI
   ): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -90,8 +90,8 @@ export class UserService {
         'Content-Type': 'application/json',
       }),
     };
-    const body = { comments };
-    console.log(body);
+    const body = { comments: comments.comments };
+    console.log('body', body);
     return this.http.patch(POSTS_URL + idPost, body, httpOptions);
   }
 
