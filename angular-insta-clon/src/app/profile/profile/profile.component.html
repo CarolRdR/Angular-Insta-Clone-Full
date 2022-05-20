@@ -61,13 +61,13 @@
 
       <li *ngFor="let image of imageList">
         <div class="images-grid__posted">
-          <a routerLink="/postdetail/{{image}}">
-            <img [src]="image" [alt]="image" type="image" class="images-grid__posted-all" (click)="imagePost()">
+          <a routerLink="/postdetail/{{image._id}}">
+            <img [src]="image.url" [alt]="image" type="image" class="images-grid__posted-all" (click)="imagePost()">
           </a>
         </div>
         <div class="button__container-delete">
           <img class="button__posted-delete" type="button" src="/assets/images/delete.png" alt="delete"
-            (click)="deletePost()" />
+            (click)="deletePost(image._id)" />
         </div>
       </li>
     </ul>

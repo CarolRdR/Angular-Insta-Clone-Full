@@ -64,11 +64,7 @@ export class UserService {
     return this.http.post(USERPOST_URL, body, httpOptions);
   }
 
-  deletePost(
-    token: string,
-    userId: UserDataI,
-    idPost: string
-  ): Observable<any> {
+  deletePost(token: string, id: string, idPost: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${token}`,
@@ -76,12 +72,13 @@ export class UserService {
       }),
     };
 
-    return this.http.delete(USER_URL + userId._id + `/${idPost}`, httpOptions);
+    return this.http.delete(USER_URL + id + `/${idPost}`, httpOptions);
   }
 
   addCommentToPost(
     token: string,
-    id: string,
+
+    idPost: string,
     comments: PostDataI
   ): Observable<any> {
     const httpOptions = {
@@ -92,8 +89,9 @@ export class UserService {
     };
     const body = { comments: comments.comments };
     console.log('body', body);
-    console.log('id', id);
-    return this.http.patch(POSTS_URL + id, body, httpOptions);
+
+    console.log('idPost', idPost);
+    return this.http.patch(POSTS_URL + `${idPost}`, body, httpOptions);
   }
 
   deleteCommentFromPost(

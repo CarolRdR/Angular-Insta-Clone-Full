@@ -9,10 +9,12 @@ const router = express.Router()
 
 router
 
-  .patch("/addComment/:idPost", loginAuthentication, userRequired, addComment)
+  .patch("/:idPost", loginAuthentication, addComment)
   .patch(
     "/:id/deleteComment/:idPost",
     loginAuthentication,
     userRequired,
     deleteComment
   )
+
+export default router
