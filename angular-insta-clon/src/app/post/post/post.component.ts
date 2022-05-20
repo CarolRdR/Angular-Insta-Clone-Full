@@ -35,7 +35,7 @@ export class PostComponent implements OnInit {
 
   ngOnInit(): void {
     this.commentForm = this.fb.group({
-      content: [''],
+      content: '',
     });
 
     this.token = localStorage.getItem('auth-token') as string;
@@ -46,6 +46,15 @@ export class PostComponent implements OnInit {
         this.commentForm
           .get('content')
           ?.setValue(this.post.comments[0].content);
+      },
+      error: (error) => {
+        this.errorMessage = error;
+      },
+    });
+
+    this.store.getImage().subscribe({
+      next: (data) => {
+        console.log('data', data);
       },
       error: (error) => {
         this.errorMessage = error;
@@ -65,23 +74,35 @@ export class PostComponent implements OnInit {
     });
   }
 
-  addComment(post: PostDataI) {
+  addComment(id: string) {
     this.userService
-      .addCommentToPost(
-        this.token,
-        post._id,
-        this.commentForm.get('content')?.value
-      )
+      .addCommentToPost(this.token, id, {
+        comments: [
+          {
+            content: this.commentForm.get('content')?.value,
+            author_id: this.userData,
+          },
+        ],
+
+        _id: '',
+        url: '',
+        user: this.userData,
+      })
       .subscribe({
         next: (data) => {
-          console.log(data);
           this.userService.saveUser(data);
 
           const postToStore = {
             ...this.contentList,
             ...data,
           };
-          this.store.setImage(postToStore);
+          this.store.setUser(postToStore);
+
+          const commentToStore: PostDataI = {
+            ...this.post,
+            ...data,
+          };
+          this.store.setImage(commentToStore);
         },
         error: (error: any) => {
           this.errorMessage = error;
