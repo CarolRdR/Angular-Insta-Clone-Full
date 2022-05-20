@@ -30,7 +30,7 @@
     <form class="posts-result__comment-form" [formGroup]="commentForm">
       <textarea placeholder="Add a comment..." type="input" formControlName="content" rows="2" type="text"
         class="posts-result__comment-box"></textarea>
-      <button type="submit" class="posts-result__comment-button" (click)="addComment(item._id)">Submit</button>
+      <button type="button" class="posts-result__comment-button" (click)="addComment(item._id)">Submit</button>
     </form>
   </div>
 

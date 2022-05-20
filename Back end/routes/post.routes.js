@@ -3,7 +3,7 @@ import {
   loginAuthentication,
   userRequired,
 } from "../middlewares/interceptor.js"
-import { addComment, deleteComment } from "../controllers/comment.controller.js"
+
 import { deletePost } from "../controllers/users/deletePhotos.controller.js"
 import {
   getIndividualPhoto,
@@ -20,18 +20,5 @@ router
   .post("/", loginAuthentication, uploadPhotos)
   .patch("/:id", loginAuthentication, updateUser)
   .delete("/:id/:idPost", loginAuthentication, userRequired, deletePost)
-
-  .patch(
-    "/:id/addComment/:idPost",
-    loginAuthentication,
-    userRequired,
-    addComment
-  )
-  .patch(
-    "/:id/deleteComment/:idPost",
-    loginAuthentication,
-    userRequired,
-    deleteComment
-  )
 
 export default router

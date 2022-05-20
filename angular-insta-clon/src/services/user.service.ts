@@ -81,7 +81,7 @@ export class UserService {
 
   addCommentToPost(
     token: string,
-    idPost: string,
+    id: string,
     comments: PostDataI
   ): Observable<any> {
     const httpOptions = {
@@ -92,7 +92,8 @@ export class UserService {
     };
     const body = { comments: comments.comments };
     console.log('body', body);
-    return this.http.patch(POSTS_URL + idPost, body, httpOptions);
+    console.log('id', id);
+    return this.http.patch(POSTS_URL + id, body, httpOptions);
   }
 
   deleteCommentFromPost(
