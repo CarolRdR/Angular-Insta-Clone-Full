@@ -5,13 +5,18 @@ import { createError } from "../services/errors.js"
 
 export const addComment = async (req, res, next) => {
   await mongoConnect()
-  console.log(req.body)
+  console.log(req.body.comments)
 
   try {
-    const comment = req.body
-    // author_id = author_id._id.toString()
-    console.log("que trae el comment", req.body)
+    // const comment = req.body.comments
+    // console.log(comment)
+    // const content = req.body.comments[0].content
+    // console.log(content)
+    // const { author_id } = req.body.comments[0].author_id
 
+    const { content } = req.body.comments[0]
+    const { author_id } = req.body.comments[0].author_id
+    console.log(author_id)
     const postId = req.params.idPost
     console.log(postId)
     const id = req.tokenPayload.id
@@ -24,9 +29,10 @@ export const addComment = async (req, res, next) => {
 
     const response = await Post.findByIdAndUpdate(
       postId,
-
       {
-        $push: { comments: comment },
+        $push: {
+          comments: { content, author_id },
+        },
       },
       { new: true }
     ).populate({
@@ -34,14 +40,27 @@ export const addComment = async (req, res, next) => {
       populate: [
         {
           path: "author_id",
-          select: "username",
+          populate: "username",
         },
         {
-          path: "user",
+          path: "content",
           select: "name",
         },
       ],
     })
+
+    // .populate("comments", [
+    //   {
+    //     path: "author_id",
+    //     select: "username",
+    //   },
+    //   {
+    //     path: "content",
+    //     select: "name",
+    //   },
+    // ]
+
+    // )
 
     //   "comments", [
     //   {
@@ -59,27 +78,40 @@ export const addComment = async (req, res, next) => {
     //   },
     // ])
 
+    // await Post.findByIdAndUpdate(postId).populate({
+    //   path: "comments",
+    //   populate: [
+    //     {
+    //       path: "author_id",
+    //       select: "userName",
+    //     },
+    //     {
+    //       path: "user",
+    //       select: "name",
+    //     },
+    //   ],
+    // })
+
     await User.findByIdAndUpdate(
-      id,
-      {
-        $push: { comments: comment },
-      },
-      { new: true }
-    ).populate("posts", [
-      {
-        path: "comments",
-        populate: [
-          {
-            path: "author_id",
-            select: "username",
-          },
-          {
-            path: "user",
-            select: "name",
-          },
-        ],
-      },
-    ])
+      id
+      // {
+      //   $push: { comments: comment },
+      // },
+      // { new: true }
+    ).populate(
+      "posts"
+      // [
+      //   {
+      //     populate: "comments",
+
+      //     path: "author_id",
+      //     select: "username",
+
+      //     path: "content",
+      //     select: "name",
+      //   },
+      // ]
+    )
     // .populate("posts", [
     //   {
     //     populate: "comments",
@@ -98,22 +130,6 @@ export const addComment = async (req, res, next) => {
     //         ],
     //       },
     //     ],
-    //   },
-    // ])
-
-    // await User.findByIdAndUpdate(id).populate("comments", [
-    //   {
-    //     path: "author_id",
-    //     populate: [
-    //       {
-    //         path: "User",
-    //         select: "username",
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     path: "content",
-    //     select: "name",
     //   },
     // ])
 
