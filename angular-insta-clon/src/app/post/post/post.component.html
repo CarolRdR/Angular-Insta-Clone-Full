@@ -23,7 +23,7 @@
               <button type="button" class="posts-result__delete" (click)="deleteComment(item._id)">X</button>
             </div> -->
           <!-- </div> -->
-      <li ng-repeat="comment of (comments| slice: - 3)" class="posts-content">
+      <li ng-repeat="comments of (postList| slice: - 3)" class="posts-content">
         <span>
           <p class="posts-result__author">{{item.comments[0].author_id}}</p>
           <div class="posts-result__comment">{{item.comments[0].content}}</div>

@@ -46,7 +46,7 @@ export class PostComponent implements OnInit {
     this.store.getUser().subscribe({
       next: (data) => {
         this.userData = data;
-
+        console.log('image', data);
         this.commentForm
           .get('content')
           ?.setValue(this.post.comments[0].content);
@@ -56,24 +56,28 @@ export class PostComponent implements OnInit {
       },
     });
 
-    this.store.getImage().subscribe({
-      next: (data) => {
-        this.post = data;
-      },
-      error: (error) => {
-        this.errorMessage = error;
-      },
-    });
+    // this.store.getImage().subscribe({
+    //   next: (data) => {
+    //     this.post = data;
+    //     console.log('image', data);
+    //   },
+    //   error: (error) => {
+    //     this.errorMessage = error;
+    //   },
+    // });
 
     this.userService.getAllPosts(this.token).subscribe({
       next: (data) => {
-        this.postsList = data.filter((item) => item.url);
+        this.postsList = data;
+        console.log(this.postsList);
 
-        this.postsList.forEach((item) => {
-          this.contentList = item.comments.filter((item) => item.content);
-          console.log(this.contentList);
-          return this.contentList;
-        });
+        // .filter((item) => item.url);
+
+        // this.postsList.forEach((item) => {
+        //   this.contentList = item.comments.filter((item) => item.content);
+        //   console.log('lista', this.contentList);
+        //   return this.contentList;
+        // });
       },
     });
   }
@@ -94,17 +98,18 @@ export class PostComponent implements OnInit {
       })
       .subscribe({
         next: (data) => {
+          console.log(data);
           const postToStore: UserDataI = {
             ...this.contentList,
             ...data,
           };
           this.store.setUser(postToStore);
 
-          const commentToStore: PostDataI = {
-            ...this.post,
-            ...data,
-          };
-          this.store.setImage(commentToStore);
+          // const commentToStore: PostDataI = {
+          //   ...this.post,
+          //   ...data,
+          // };
+          // this.store.setImage(commentToStore);
         },
         error: (error: any) => {
           this.errorMessage = error;
