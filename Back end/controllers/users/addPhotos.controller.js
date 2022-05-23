@@ -6,14 +6,15 @@ import { User } from "../../model/user.model.js"
 export const uploadPhotos = async (req, resp, next) => {
   await mongoConnect()
 
-  const url = req.body
-
-  const userId = req.tokenPayload.id
-
   try {
-    const response = await Post.create(url, {
+    const url = req.body
+    const userId = req.tokenPayload.id
+    const user = req.params.id
+
+    const response = await Post.create(url, user, {
       new: true,
     })
+    console.log(response)
     const postId = response[0]._id
 
     await User.findByIdAndUpdate(
@@ -29,20 +30,23 @@ export const uploadPhotos = async (req, resp, next) => {
       populate: [
         {
           path: "author_id",
-          select: "userName",
+          select: "username",
         },
         {
-          path: "user",
+          path: "content",
           select: "name",
+        },
+      ],
+      path: "user",
+      populate: [
+        {
+          path: "username",
+          select: "username",
         },
       ],
     })
 
-    const result = {
-      response,
-    }
-
-    resp.json(result)
+    resp.json(response)
   } catch (error) {
     next(createError(error))
   }
@@ -50,25 +54,39 @@ export const uploadPhotos = async (req, resp, next) => {
 
 export const getListPhotos = async (req, resp, next) => {
   await mongoConnect()
+
   try {
     const { posts } = req.body
+    const { comments } = req.body
 
-    let foundPosts = await User.find({
-      post: { $in: posts },
-    }).populate("posts")
+    // let foundPosts = await User.find({
+    //   post: { $in: posts },
+    // }).populate("posts")
+
+    // if (!foundPosts) {
+    //   next(204)
+    // }
+
+    // foundPosts = foundPosts.map((post) => {
+    //   const { posts } = post._doc
+    //   console.log(posts)
+    //   return posts
+    // })
+
+    let foundPosts = await Post.find({
+      comment: { $in: comments },
+    }).populate("comments")
 
     if (!foundPosts) {
       next(204)
     }
-
     foundPosts = foundPosts.map((post) => {
-      const { posts } = post._doc
-      // comments, url, user
-
-      return posts
+      const { _id, url, comments, user } = post._doc
+      // console.log(_id, url, comments, user)
+      return { ...post._doc }
     })
-
-    resp.json(foundPosts)
+    console.log(...foundPosts)
+    resp.json(...foundPosts)
   } catch (error) {
     next(createError(error, 404))
   }

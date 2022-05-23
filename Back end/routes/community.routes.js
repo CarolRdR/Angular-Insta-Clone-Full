@@ -1,19 +1,16 @@
 import express from "express"
-import {
-  loginAuthentication,
-  userRequired,
-} from "../middlewares/interceptor.js"
+import { loginAuthentication } from "../middlewares/interceptor.js"
 import { addComment, deleteComment } from "../controllers/comment.controller.js"
+import { getListPhotos } from "../controllers/users/addPhotos.controller.js"
 
 const router = express.Router()
 
 router
-
+  .get("/", loginAuthentication, getListPhotos)
   .patch("/:idPost", loginAuthentication, addComment)
   .patch(
-    "/:id/deleteComment/:idPost",
+    "/:idPost/deleteComment/:idComment",
     loginAuthentication,
-    userRequired,
     deleteComment
   )
 
