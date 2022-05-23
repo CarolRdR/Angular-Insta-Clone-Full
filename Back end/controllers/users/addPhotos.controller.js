@@ -82,11 +82,15 @@ export const getListPhotos = async (req, resp, next) => {
     }
     foundPosts = foundPosts.map((post) => {
       const { _id, url, comments, user } = post._doc
-      // console.log(_id, url, comments, user)
-      return { ...post._doc }
+      return {
+        _id,
+        url,
+        comments,
+        user,
+      }
     })
-    console.log(...foundPosts)
-    resp.json(...foundPosts)
+
+    resp.json(foundPosts)
   } catch (error) {
     next(createError(error, 404))
   }
