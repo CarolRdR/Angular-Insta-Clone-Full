@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { PostDataI, UserDataI } from 'src/models/interfaces';
 import { StoreService } from 'src/services/store.service';
@@ -19,7 +20,8 @@ export class PostComponent implements OnInit {
   errorMessage: string;
   postsList!: PostDataI[];
   post!: PostDataI;
-  contentList: any[] = [];
+  contentList: any = [];
+  commentList: any = [];
   url!: string | undefined;
   user!: UserDataI;
   processing = false;
@@ -27,7 +29,8 @@ export class PostComponent implements OnInit {
   constructor(
     public userService: UserService,
     public store: StoreService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public router: Router
   ) {
     this.token = '';
     this.errorMessage = '';
@@ -43,6 +46,7 @@ export class PostComponent implements OnInit {
     this.store.getUser().subscribe({
       next: (data) => {
         this.userData = data;
+
         this.commentForm
           .get('content')
           ?.setValue(this.post.comments[0].content);
@@ -55,7 +59,6 @@ export class PostComponent implements OnInit {
     this.store.getImage().subscribe({
       next: (data) => {
         this.post = data;
-        console.log('data', data);
       },
       error: (error) => {
         this.errorMessage = error;
@@ -64,25 +67,24 @@ export class PostComponent implements OnInit {
 
     this.userService.getAllPosts(this.token).subscribe({
       next: (data) => {
-        this.postsList = [...data];
+        this.postsList = data.filter((item) => item.url);
 
         this.postsList.forEach((item) => {
-          this.contentList = item.comments;
-
+          this.contentList = item.comments.filter((item) => item.content);
+          console.log(this.contentList);
           return this.contentList;
         });
       },
     });
   }
-
   addComment(id: any) {
-    // const inputComment = ev.target.value;
+    // const inputComment = this.commentForm.value;
     this.userService
       .addCommentToPost(this.token, id, {
         comments: [
           {
             content: this.commentForm.get('content')?.value,
-            author_id: this.userData.username,
+            author_id: this.userData,
           },
         ],
 
@@ -92,8 +94,6 @@ export class PostComponent implements OnInit {
       })
       .subscribe({
         next: (data) => {
-          this.userService.saveUser(data);
-
           const postToStore: UserDataI = {
             ...this.contentList,
             ...data,
@@ -105,6 +105,20 @@ export class PostComponent implements OnInit {
             ...data,
           };
           this.store.setImage(commentToStore);
+        },
+        error: (error: any) => {
+          this.errorMessage = error;
+        },
+      });
+    this.router.navigate(['community']);
+  }
+
+  deleteComment(idPost: string, idComment: string) {
+    this.userService
+      .deleteCommentFromPost(this.token, idPost, idComment)
+      .subscribe({
+        next: (data) => {
+          console.log(data);
         },
         error: (error: any) => {
           this.errorMessage = error;

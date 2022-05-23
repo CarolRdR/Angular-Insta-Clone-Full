@@ -62,17 +62,14 @@ export class ProfileComponent implements OnInit {
       next: (data) => {
         this.loggedUserData = data;
 
-        const { username, profileImage, posts, _id, token, email } =
-          this.loggedUserData;
+        const { username, profileImage, posts, _id } = this.loggedUserData;
         this.profileData = username;
         this.profileImage = profileImage;
         this.profileId = _id;
 
         posts.map((item) => {
           this.imageList.push(item);
-          this.userList.push(item['user']);
 
-          console.log('lista', this.imageList);
           return this.imageList;
         });
       },
@@ -97,7 +94,7 @@ export class ProfileComponent implements OnInit {
       this.storageFirebase.upload(filePath, file).then((data) => {
         data.ref.getDownloadURL().then((url) => {
           this.downloadableURL = url;
-          console.log('url', this.downloadableURL);
+
           document
             .getElementsByClassName('user-data__image-preview')[0]
             .setAttribute('src', this.downloadableURL);
@@ -160,21 +157,24 @@ export class ProfileComponent implements OnInit {
   }
 
   uploadImage(): void {
-    this.userService.addPhoto(this.downloadableURL!, this.token).subscribe({
-      next: (data) => {
-        this.userService.saveUser(this.imageToUploadList);
+    this.userService
+      .addPhoto(this.downloadableURL!, this.token, this.loggedUserData._id)
+      .subscribe({
+        next: (data) => {
+          this.userService.saveUser(data);
 
-        const postToStore: UserDataI = {
-          ...this.loggedUserData,
-          ...data,
-        };
+          const postToStore: UserDataI = {
+            ...this.loggedUserData,
+            ...data,
+          };
 
-        this.store.setUser(postToStore);
-      },
-      error: (error: any) => {
-        this.errorMessage = error;
-      },
-    });
+          this.store.setUser(postToStore);
+        },
+        error: (error: any) => {
+          this.errorMessage = error;
+        },
+      });
+    window.location.reload();
   }
 
   imagePost() {

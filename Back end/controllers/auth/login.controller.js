@@ -18,10 +18,12 @@ export const loginUser = async (req, resp, next) => {
       next(loginError)
     } else {
       const id = userFound.id
+      const username = userFound.username
 
       const token = createToken({
         email: userFound.email,
         id,
+        username,
       })
       resp.json({
         token,
@@ -30,7 +32,6 @@ export const loginUser = async (req, resp, next) => {
         profileImage: userFound.profileImage,
         username: userFound.username,
         posts: userFound.posts,
-        // userFound,
       })
     }
   }

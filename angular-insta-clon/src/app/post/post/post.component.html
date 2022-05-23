@@ -6,12 +6,9 @@
       <li *ngFor="let item of postsList" class="posts-result">
 
         <div class="posts-result___details">
-
+          <p>{{item.user}}</p>
           <img [src]="item.url" [alt]="item._id" type="image" class="posts-result__posted-all">
-
         </div>
-
-
 
         <div class="posts-result__add">
           <a routerLink="/postdetail/{{item._id}}" class="posts-result__name">
@@ -19,9 +16,19 @@
         </div>
 
         <div class="posts-result__sample-comments">
-          <span class="posts-result__add-comment">{{item.user}}</span>
-      <li *ngFor="let item of contentList" class="posts-content">
-        <p class="posts-result__comment">{{item.content}}</p>
+          <!-- <div ng-repeat="post in posts"> -->
+          <!-- <div ng-repeat="comment in (comments  | slice: - 3) | filter : {'postId' : posts._id }">
+              <p href="" class="size13">{{item.comments[0].author_id}}</p>
+              <span class="size12"> {{item.comments[0].content}} </span>
+              <button type="button" class="posts-result__delete" (click)="deleteComment(item._id)">X</button>
+            </div> -->
+          <!-- </div> -->
+      <li ng-repeat="comment of (comments| slice: - 3)" class="posts-content">
+        <span>
+          <p class="posts-result__author">{{item.comments[0].author_id}}</p>
+          <div class="posts-result__comment">{{item.comments[0].content}}</div>
+        </span>
+        <button type="button" class="posts-result__delete" (click)="deleteComment(item._id, contentList._id)">X</button>
       </li>
 
   </div>

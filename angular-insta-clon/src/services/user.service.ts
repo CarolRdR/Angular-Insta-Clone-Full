@@ -26,17 +26,18 @@ export class UserService {
     };
     return this.http.get<UserDataI>(USER_URL + userId, httpOptions);
   }
-  getAllPosts(token: string): Observable<any> {
+  getAllPosts(token: string): Observable<any[]> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       }),
     };
-    return this.http.get<any>(USER_URL, httpOptions).pipe(
-      map((data: any) => {
+    return this.http.get<any>(POSTS_URL, httpOptions).pipe(
+      map((data) => {
         let mergedData = [].concat.apply([], data);
         this.imagesList = mergedData;
+
         return this.imagesList;
       })
     );
@@ -51,7 +52,7 @@ export class UserService {
     return this.http.patch(USER_URL + user._id, user, httpOptions);
   }
 
-  addPhoto(url: any, token: string): Observable<any> {
+  addPhoto(url: any, token: string, userId: string): Observable<any> {
     console.log('token', url);
     const httpOptions = {
       headers: new HttpHeaders({
@@ -59,8 +60,8 @@ export class UserService {
         'Content-Type': 'application/json',
       }),
     };
-    const body = { url: url };
-    console.log('body', url);
+    const body = { url: url, user: userId };
+
     return this.http.post(USERPOST_URL, body, httpOptions);
   }
 
@@ -77,7 +78,6 @@ export class UserService {
 
   addCommentToPost(
     token: string,
-
     idPost: string,
     comments: PostDataI
   ): Observable<any> {
@@ -88,27 +88,23 @@ export class UserService {
       }),
     };
     const body = { comments: comments.comments };
-    console.log('body', body);
-
-    console.log('idPost', idPost);
     return this.http.patch(POSTS_URL + `${idPost}`, body, httpOptions);
   }
 
   deleteCommentFromPost(
     token: string,
     idPost: string,
-    user: UserDataI
-  ): Observable<UserDataI> {
+    idComment: string
+  ): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       }),
     };
-    const body = { commentId: user };
-    return this.http.patch<UserDataI>(
-      POSTS_URL + `${idPost}`,
-      body,
+
+    return this.http.patch(
+      POSTS_URL + `${idPost}` + `/${idComment}`,
       httpOptions
     );
   }
