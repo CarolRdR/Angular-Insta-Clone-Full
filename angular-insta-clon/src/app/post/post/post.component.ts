@@ -110,7 +110,6 @@ export class PostComponent implements OnInit {
           this.errorMessage = error;
         },
       });
-    this.router.navigate(['community']);
   }
 
   deleteComment(idPost: string, idComment: string) {
