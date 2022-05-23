@@ -29,18 +29,13 @@ export const addComment = async (req, res, next) => {
         },
       },
       { new: true }
-    )
-
-    await User.findByIdAndUpdate(userId)
-    .populate("posts")
-
-    await Post.findById(postId).populate({
+    ).populate({
       path: "comments",
       populate: [
         {
           path: "author_id",
           select: "username",
-          // populate: [{ path: "username", select: "username" }],
+          populate: [{ path: "username", select: "username" }],
         },
         {
           path: "user",
@@ -48,9 +43,11 @@ export const addComment = async (req, res, next) => {
         },
       ],
     })
+    const { comments } = response
+    console.log(comments)
 
     res.status(201)
-    console.log("respuesta", response)
+
     res.json(response)
   } catch (err) {
     next(createError(err, "no se ha podido crear el comentario especificado."))

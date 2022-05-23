@@ -37,7 +37,7 @@ export class UserService {
       map((data) => {
         let mergedData = [].concat.apply([], data);
         this.imagesList = mergedData;
-
+        console.log('imagelist', this.imagesList);
         return this.imagesList;
       })
     );

@@ -59,34 +59,38 @@ export const getListPhotos = async (req, resp, next) => {
     const { posts } = req.body
     const { comments } = req.body
 
-    // let foundPosts = await User.find({
-    //   post: { $in: posts },
-    // }).populate("posts")
-
-    // if (!foundPosts) {
-    //   next(204)
-    // }
-
-    // foundPosts = foundPosts.map((post) => {
-    //   const { posts } = post._doc
-    //   console.log(posts)
-    //   return posts
-    // })
-
-    let foundPosts = await Post.find({
-      comment: { $in: comments },
-    }).populate("comments")
+    let foundPosts = await User.find({
+      post: { $in: posts },
+    }).populate("posts")
 
     if (!foundPosts) {
       next(204)
     }
+
     foundPosts = foundPosts.map((post) => {
-      const { _id, url, comments, user } = post._doc
-      // console.log(_id, url, comments, user)
-      return { ...post._doc }
+      const { posts } = post._doc
+      console.log(posts)
+      return posts
     })
-    console.log(...foundPosts)
-    resp.json(...foundPosts)
+
+    // let foundPosts = await Post.find({
+    //   comment: { $in: comments },
+    // }).populate("comments")
+
+    // if (!foundPosts) {
+    //   next(204)
+    // }
+    // foundPosts = foundPosts.map((post) => {
+    //   const { _id, url, comments, user } = post._doc
+    //   return {
+    //     _id,
+    //     url,
+    //     comments,
+    //     user,
+    //   }
+    // })
+
+    resp.json(foundPosts)
   } catch (error) {
     next(createError(error, 404))
   }
