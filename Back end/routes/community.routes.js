@@ -8,10 +8,6 @@ const router = express.Router()
 router
   .get("/", loginAuthentication, getListPhotos)
   .patch("/:idPost", loginAuthentication, addComment)
-  .patch(
-    "/:idPost/deleteComment/:idComment",
-    loginAuthentication,
-    deleteComment
-  )
+  .delete("/:idPost/:idComment", loginAuthentication, deleteComment)
 
 export default router

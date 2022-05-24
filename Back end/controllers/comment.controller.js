@@ -11,7 +11,7 @@ export const addComment = async (req, res, next) => {
 
     const postId = req.params.idPost
 
-    const userId = req.tokenPayload.id
+    // const userId = req.tokenPayload.id
 
     const resp = await Post.findById(postId)
     if (!resp) {
@@ -31,6 +31,7 @@ export const addComment = async (req, res, next) => {
       { new: true }
     ).populate({
       path: "comments",
+      _id: 1,
       populate: [
         {
           path: "author_id",
@@ -38,62 +39,51 @@ export const addComment = async (req, res, next) => {
         },
         {
           path: "user",
-          select: "name",
+          populate: [{ path: "_id", select: "_id" }],
         },
       ],
     })
-    // const { comments } = response
-    // console.log(comments)
-    console.log(response)
-    res.status(201)
 
+    res.status(201)
+    console.log(response)
     res.json(response)
   } catch (err) {
-    next(createError(err, "no se ha podido crear el comentario especificado."))
+    next(createError(err, "No se ha podido crear el comentario especificado."))
   }
 }
 
 export const deleteComment = async (req, res, next) => {
   await mongoConnect()
-  console.log(req.params)
+
   try {
     const { idPost, idComment } = req.params
-
-    const id = req.tokenPayload.id
-
     const post = await Post.findById(idPost)
-    console.log(post)
-    if (!post) {
-      next(404)
-    }
-    // const post = await Post.findByIdAndUpdate(
-    //   idPost,
-    //   {
-    //     $pull: { comments: idComment },
-    //   },
-    //   { new: true }
-    // )
-    // await User.findByIdAndUpdate(
-    //   id,
-    //   {
-    //     $pull: { comments: commentId },
-    //   },
-    //   { new: true }
-    // )
-    const comment = post.comments.find((item) => item.id === idComment)
-    console.log(comment)
+
+    // Pull out comment
+    const comment = post.comments.find((comment) => comment.id === idComment)
+
+    // Make sure comment exists
     if (!comment) {
-      next(404)
+      return res.status(404).json({ msg: "Comment does not exist" })
     }
 
-    if (comment.author_id === id.toString()) {
-      post.comments = post.comments.filter(({ id }) => id !== idComment)
+    // Check user
+    if (comment.author_id._id.toString() !== req.tokenPayload.id) {
+      return res.status(401).json({ msg: "User not authorized" })
     }
+
+    // Get remove index
+    const removeIndex = post.comments
+      .map((comment) => comment.author_id._id.toString())
+      .indexOf(req.tokenPayload.id)
+    console.log(removeIndex)
+    post.comments.splice(removeIndex, 1)
+
     await post.save()
 
-    console.log(post)
-    res.json(post)
+    res.json(post.comments)
   } catch (err) {
-    next(createError(err))
+    console.error(err.message)
+    res.status(500).send("Server Error")
   }
 }
