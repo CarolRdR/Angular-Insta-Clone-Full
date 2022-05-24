@@ -62,7 +62,6 @@ export class PostComponent implements OnInit {
     this.userService.getAllPosts(this.token).subscribe({
       next: (data) => {
         this.postsList = data;
-        console.log(this.postsList[0].comments);
 
         // this.commentList = this.postsList.map((item: any) => {
 
@@ -81,6 +80,7 @@ export class PostComponent implements OnInit {
           {
             content: this.commentForm.get('content')?.value,
             author_id: this.userData,
+            _id: '',
           },
         ],
 
@@ -108,7 +108,7 @@ export class PostComponent implements OnInit {
       .deleteCommentFromPost(
         this.token,
         this.postsList[0]._id,
-        this.postsList[0].comments[0].author_id._id
+        this.postsList[0].comments[0]._id
       )
       .subscribe({
         next: (data) => {
@@ -118,5 +118,6 @@ export class PostComponent implements OnInit {
           this.errorMessage = error;
         },
       });
+    // window.location.reload();
   }
 }
