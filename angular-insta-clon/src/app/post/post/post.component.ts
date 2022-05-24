@@ -20,7 +20,8 @@ export class PostComponent implements OnInit {
   errorMessage: string;
   postsList!: PostDataI[];
   post!: PostDataI;
-  contentList: any = [];
+  contentComments: any;
+
   commentList: any = [];
   url!: string | undefined;
   user!: UserDataI;
@@ -46,7 +47,7 @@ export class PostComponent implements OnInit {
     this.store.getUser().subscribe({
       next: (data) => {
         this.userData = data;
-        console.log('image', data);
+
         this.commentForm
           .get('content')
           ?.setValue(this.post.comments[0].content);
@@ -56,35 +57,23 @@ export class PostComponent implements OnInit {
       },
     });
 
-    // this.store.getImage().subscribe({
-    //   next: (data) => {
-    //     this.post = data;
-    //     console.log('image', data);
-    //   },
-    //   error: (error) => {
-    //     this.errorMessage = error;
-    //   },
-    // });
-
     this.userService.getAllPosts(this.token).subscribe({
       next: (data) => {
         this.postsList = data;
-        console.log(this.postsList);
 
-        // .filter((item) => item.url);
+        // this.commentList = this.postsList.map((item: any) => {
 
-        // this.postsList.forEach((item) => {
-        //   this.contentList = item.comments.filter((item) => item.content);
-        //   console.log('lista', this.contentList);
-        //   return this.contentList;
+        //   this.contentComments = item.comments;
+
+        //   return this.contentComments;
+
         // });
       },
     });
   }
   addComment(id: any) {
-    // const inputComment = this.commentForm.value;
     this.userService
-      .addCommentToPost(this.token, id, {
+      .addCommentToPost(this.token, {
         comments: [
           {
             content: this.commentForm.get('content')?.value,
@@ -100,33 +89,26 @@ export class PostComponent implements OnInit {
         next: (data) => {
           console.log(data);
           const postToStore: UserDataI = {
-            ...this.contentList,
+            ...this.postsList,
             ...data,
           };
           this.store.setUser(postToStore);
-
-          // const commentToStore: PostDataI = {
-          //   ...this.post,
-          //   ...data,
-          // };
-          // this.store.setImage(commentToStore);
         },
         error: (error: any) => {
           this.errorMessage = error;
         },
       });
+    // window.location.reload();
   }
 
-  deleteComment(idPost: string, idComment: string) {
-    this.userService
-      .deleteCommentFromPost(this.token, idPost, idComment)
-      .subscribe({
-        next: (data) => {
-          console.log(data);
-        },
-        error: (error: any) => {
-          this.errorMessage = error;
-        },
-      });
+  deleteComment(idComment: string) {
+    this.userService.deleteCommentFromPost(this.token, idComment).subscribe({
+      next: (data) => {
+        console.log(data);
+      },
+      error: (error: any) => {
+        this.errorMessage = error;
+      },
+    });
   }
 }

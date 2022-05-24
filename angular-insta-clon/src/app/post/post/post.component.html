@@ -8,6 +8,7 @@
         <div class="posts-result___details">
           <p>{{item.user}}</p>
           <img [src]="item.url" [alt]="item._id" type="image" class="posts-result__posted-all">
+
         </div>
 
         <div class="posts-result__add">
@@ -15,35 +16,45 @@
             <img role="button" alt="Add Comment" src="/assets/images/comment.png" class="posts-result__add-comment"></a>
         </div>
 
-        <div class="posts-result__sample-comments">
-          <!-- <div ng-repeat="post in posts"> -->
-          <!-- <div ng-repeat="comment in (comments  | slice: - 3) | filter : {'postId' : posts._id }">
+        <div class="posts-content" *ngFor="let element of item.comments.slice(-3)">
+          <span>
+            <p class=" posts-result__author">{{element.author_id}}</p>
+            <p class="posts-result__comment">{{element.content}}</p>
+          </span>
+          <button type="button" class="posts-result__delete" (click)="deleteComment(element.author_id._id)">X</button>
+
+
+        </div>
+
+        <div class="posts-result__comment">
+          <form class="posts-result__comment-form" [formGroup]="commentForm">
+            <textarea placeholder="Add a comment..." type="input" formControlName="content" rows="2" type="text"
+              class="posts-result__comment-box"></textarea>
+            <button type="button" class="posts-result__comment-button" (click)="addComment(item._id)">Submit</button>
+          </form>
+        </div>
+
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+<!-- <div class="posts-result__sample-comments"> -->
+<!-- <div ng-repeat="post in posts"> -->
+<!-- <div ng-repeat="comment in (comments  | slice: - 3) | filter : {'postId' : posts._id }">
               <p href="" class="size13">{{item.comments[0].author_id}}</p>
               <span class="size12"> {{item.comments[0].content}} </span>
               <button type="button" class="posts-result__delete" (click)="deleteComment(item._id)">X</button>
             </div> -->
-          <!-- </div> -->
-      <li ng-repeat="comments of (postList| slice: - 3)" class="posts-content">
-        <span>
-          <p class="posts-result__author">{{item.comments[0].author_id}}</p>
-          <div class="posts-result__comment">{{item.comments[0].content}}</div>
-        </span>
-        <button type="button" class="posts-result__delete" (click)="deleteComment(item._id, contentList._id)">X</button>
-      </li>
+<!-- </div> -->
 
-  </div>
 
-  <div class="posts-result__comment">
-    <form class="posts-result__comment-form" [formGroup]="commentForm">
-      <textarea placeholder="Add a comment..." type="input" formControlName="content" rows="2" type="text"
-        class="posts-result__comment-box"></textarea>
-      <button type="button" class="posts-result__comment-button" (click)="addComment(item._id)">Submit</button>
-    </form>
-  </div>
 
-  </li>
-  </ul>
-
-</div>
-
-</div>
+<!-- </div> -->

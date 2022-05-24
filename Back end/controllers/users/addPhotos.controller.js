@@ -14,7 +14,6 @@ export const uploadPhotos = async (req, resp, next) => {
     const response = await Post.create(url, user, {
       new: true,
     })
-    console.log(response)
     const postId = response[0]._id
 
     await User.findByIdAndUpdate(
@@ -57,7 +56,6 @@ export const getListPhotos = async (req, resp, next) => {
 
   try {
     const { posts } = req.body
-    const { comments } = req.body
 
     let foundPosts = await User.find({
       post: { $in: posts },
@@ -67,28 +65,11 @@ export const getListPhotos = async (req, resp, next) => {
       next(204)
     }
 
-    foundPosts = foundPosts.map((post) => {
-      const { posts } = post._doc
-      console.log(posts)
+    foundPosts = foundPosts.map((data) => {
+      const { posts } = data
+
       return posts
     })
-
-    // let foundPosts = await Post.find({
-    //   comment: { $in: comments },
-    // }).populate("comments")
-
-    // if (!foundPosts) {
-    //   next(204)
-    // }
-    // foundPosts = foundPosts.map((post) => {
-    //   const { _id, url, comments, user } = post._doc
-    //   return {
-    //     _id,
-    //     url,
-    //     comments,
-    //     user,
-    //   }
-    // })
 
     resp.json(foundPosts)
   } catch (error) {
@@ -117,7 +98,7 @@ export const getIndividualPhoto = async (req, resp, next) => {
         user,
       }
     })
-    // console.log("lo que me trae posts", foundPost)
+
     resp.json(foundPost)
   } catch (error) {
     next(createError(error, 404))

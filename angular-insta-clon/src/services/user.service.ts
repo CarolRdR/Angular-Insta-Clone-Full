@@ -26,7 +26,7 @@ export class UserService {
     };
     return this.http.get<UserDataI>(USER_URL + userId, httpOptions);
   }
-  getAllPosts(token: string): Observable<any[]> {
+  getAllPosts(token: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ export class UserService {
       map((data) => {
         let mergedData = [].concat.apply([], data);
         this.imagesList = mergedData;
-        console.log('imagelist', this.imagesList);
+        console.log(this.imagesList);
         return this.imagesList;
       })
     );
@@ -76,24 +76,23 @@ export class UserService {
     return this.http.delete(USER_URL + id + `/${idPost}`, httpOptions);
   }
 
-  addCommentToPost(
-    token: string,
-    idPost: string,
-    comments: PostDataI
-  ): Observable<any> {
+  addCommentToPost(token: string, post: PostDataI): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       }),
     };
-    const body = { comments: comments.comments };
-    return this.http.patch(POSTS_URL + `${idPost}`, body, httpOptions);
+
+    const body = { comments: post.comments };
+    console.log(body);
+
+    return this.http.patch(POSTS_URL + `${post._id}`, body, httpOptions);
   }
 
   deleteCommentFromPost(
     token: string,
-    idPost: string,
+
     idComment: string
   ): Observable<any> {
     const httpOptions = {
@@ -103,10 +102,7 @@ export class UserService {
       }),
     };
 
-    return this.http.patch(
-      POSTS_URL + `${idPost}` + `/${idComment}`,
-      httpOptions
-    );
+    return this.http.patch(POSTS_URL + `${idComment}`, httpOptions);
   }
 
   public saveUser(user: any): void {
