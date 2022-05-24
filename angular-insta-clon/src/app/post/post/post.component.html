@@ -21,8 +21,9 @@
             <p class=" posts-result__author">{{element.author_id}}</p>
             <p class="posts-result__comment">{{element.content}}</p>
           </span>
-          <button type="button" class="posts-result__delete" (click)="deleteComment(element.author_id._id)">X</button>
-
+          <button type="button" class="posts-result__delete"
+            (click)="deleteComment(item._id, element.author_id._id)">X</button>
+          <!-- *ngIf="this.userData._id === element.author_id._id" -->
 
         </div>
 
@@ -39,22 +40,3 @@
   </div>
 
 </div>
-
-
-
-
-
-
-
-<!-- <div class="posts-result__sample-comments"> -->
-<!-- <div ng-repeat="post in posts"> -->
-<!-- <div ng-repeat="comment in (comments  | slice: - 3) | filter : {'postId' : posts._id }">
-              <p href="" class="size13">{{item.comments[0].author_id}}</p>
-              <span class="size12"> {{item.comments[0].content}} </span>
-              <button type="button" class="posts-result__delete" (click)="deleteComment(item._id)">X</button>
-            </div> -->
-<!-- </div> -->
-
-
-
-<!-- </div> -->

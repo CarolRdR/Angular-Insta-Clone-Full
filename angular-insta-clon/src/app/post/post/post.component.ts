@@ -15,6 +15,8 @@ export class PostComponent implements OnInit {
   // @Input() comment: any;
 
   token: string;
+  idPost!: string;
+  idComment!: string;
   commentForm!: FormGroup;
   userData!: UserDataI;
   errorMessage: string;
@@ -60,6 +62,7 @@ export class PostComponent implements OnInit {
     this.userService.getAllPosts(this.token).subscribe({
       next: (data) => {
         this.postsList = data;
+        console.log(this.postsList[0].comments);
 
         // this.commentList = this.postsList.map((item: any) => {
 
@@ -71,9 +74,9 @@ export class PostComponent implements OnInit {
       },
     });
   }
-  addComment(id: any) {
+  addComment(idPost: any) {
     this.userService
-      .addCommentToPost(this.token, {
+      .addCommentToPost(this.token, idPost, {
         comments: [
           {
             content: this.commentForm.get('content')?.value,
@@ -87,7 +90,6 @@ export class PostComponent implements OnInit {
       })
       .subscribe({
         next: (data) => {
-          console.log(data);
           const postToStore: UserDataI = {
             ...this.postsList,
             ...data,
@@ -101,14 +103,20 @@ export class PostComponent implements OnInit {
     // window.location.reload();
   }
 
-  deleteComment(idComment: string) {
-    this.userService.deleteCommentFromPost(this.token, idComment).subscribe({
-      next: (data) => {
-        console.log(data);
-      },
-      error: (error: any) => {
-        this.errorMessage = error;
-      },
-    });
+  deleteComment(idComment: string, author_id: string) {
+    this.userService
+      .deleteCommentFromPost(
+        this.token,
+        this.postsList[0]._id,
+        this.postsList[0].comments[0].author_id._id
+      )
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+        },
+        error: (error: any) => {
+          this.errorMessage = error;
+        },
+      });
   }
 }
