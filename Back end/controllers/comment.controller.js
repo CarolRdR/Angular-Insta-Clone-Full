@@ -24,7 +24,7 @@ export const addComment = async (req, res, next) => {
         $push: {
           comments: {
             content: content,
-            author_id: author_id.id,
+            author_id: author_id,
           },
         },
       },
@@ -34,7 +34,6 @@ export const addComment = async (req, res, next) => {
       populate: [
         {
           path: "author_id",
-          select: "username",
           populate: [{ path: "username", select: "username" }],
         },
         {
@@ -43,9 +42,9 @@ export const addComment = async (req, res, next) => {
         },
       ],
     })
-    const { comments } = response
-    console.log(comments)
-
+    // const { comments } = response
+    // console.log(comments)
+    console.log(response)
     res.status(201)
 
     res.json(response)
