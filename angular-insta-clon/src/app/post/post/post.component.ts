@@ -12,8 +12,6 @@ import { UserService } from 'src/services/user.service';
   styleUrls: ['./post.component.scss'],
 })
 export class PostComponent implements OnInit {
-  // @Input() comment: any;
-
   token: string;
   idPost!: string;
   idComment!: string;
@@ -23,11 +21,6 @@ export class PostComponent implements OnInit {
   postsList!: PostDataI[];
   post!: PostDataI;
   contentComments: any;
-
-  commentList: any = [];
-  url!: string | undefined;
-  user!: UserDataI;
-  processing = false;
 
   constructor(
     public userService: UserService,
@@ -62,14 +55,14 @@ export class PostComponent implements OnInit {
     this.userService.getAllPosts(this.token).subscribe({
       next: (data) => {
         this.postsList = data;
+        console.log(this.postsList);
 
-        // this.commentList = this.postsList.map((item: any) => {
+        this.postsList.map((item: any) => {
+          this.post = item;
+          console.log(this.post);
 
-        //   this.contentComments = item.comments;
-
-        //   return this.contentComments;
-
-        // });
+          return this.post;
+        });
       },
     });
   }
@@ -100,15 +93,15 @@ export class PostComponent implements OnInit {
           this.errorMessage = error;
         },
       });
-    // window.location.reload();
+    window.location.reload();
   }
 
-  deleteComment(idComment: string, author_id: string) {
+  deleteComment(author_id: string) {
     this.userService
       .deleteCommentFromPost(
         this.token,
-        this.postsList[0]._id,
-        this.postsList[0].comments[0]._id
+        this.post._id,
+        this.post.comments[0]._id
       )
       .subscribe({
         next: (data) => {

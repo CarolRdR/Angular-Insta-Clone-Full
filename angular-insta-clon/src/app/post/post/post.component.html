@@ -21,7 +21,7 @@
             <p class=" posts-result__author">{{element.author_id}}</p>
             <p class="posts-result__comment">{{element.content}}</p>
           </span>
-          <button type="button" class="posts-result__delete" (click)="deleteComment(item._id, element._id)">X</button>
+          <button type="button" class="posts-result__delete" (click)="deleteComment(element._id)">X</button>
           <!-- *ngIf="this.userData._id === element.author_id._id" -->
 
         </div>
