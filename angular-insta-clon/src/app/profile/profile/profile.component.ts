@@ -19,16 +19,12 @@ export class ProfileComponent implements OnInit {
   @Input() nameToShow!: string | undefined;
   @Input() imageToShow!: string | undefined;
 
-  ref!: AngularFireStorageReference;
-  task!: AngularFireUploadTask;
-
   profileUserForm!: FormGroup;
   postId: string;
   userId!: string;
   token: string;
   errorMessage: string;
   loggedUserData!: UserDataI;
-  userData!: UserDataI;
   profileData!: string;
   profileImage!: string;
   profileId!: string;
@@ -36,7 +32,6 @@ export class ProfileComponent implements OnInit {
   downloadableURL: string | undefined = undefined;
   imageToUploadList: string[] = [];
   imageList: PostDataI[] = [];
-  userList: string[] = [];
   active = false;
   open = false;
 

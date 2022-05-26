@@ -7,7 +7,7 @@ export const addComment = async (req, res, next) => {
   await mongoConnect()
 
   try {
-    const { content, author_id } = req.body.comments[0]
+    const { content, author_id, _id } = req.body.comments[0]
 
     const postId = req.params.idPost
 
@@ -25,13 +25,14 @@ export const addComment = async (req, res, next) => {
           comments: {
             content: content,
             author_id: author_id,
+            _id: _id,
           },
         },
       },
       { new: true }
     ).populate({
       path: "comments",
-      _id: 1,
+
       populate: [
         {
           path: "author_id",
@@ -45,7 +46,7 @@ export const addComment = async (req, res, next) => {
     })
 
     res.status(201)
-    console.log(response)
+
     res.json(response)
   } catch (err) {
     next(createError(err, "No se ha podido crear el comentario especificado."))
